@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+    
+    <entry>
+      <title><![CDATA[test]]></title>
+      <url>/2018/10/23/test/</url>
+      <content type="html"><![CDATA[<p>this is a test md</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[学习笔记 - 2018年10月第四周 - 个人技能树]]></title>
+      <url>/2018/10/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2018%E5%B9%B410%E6%9C%88%E7%AC%AC%E5%9B%9B%E5%91%A8/</url>
+      <content type="html"><![CDATA[<p>第1版<br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fwh8cmfvxej20ps0ujacb.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Tech </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[学习笔记 - 2018年10月第三周 - GIT原理]]></title>
+      <url>/2018/10/15/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2018%E5%B9%B410%E6%9C%88%E7%AC%AC%E4%B8%89%E5%91%A8/</url>
+      <content type="html"><![CDATA[<p>Git作为目前最流行的版本管理工具，我在工作中已经使用了很长一段时间了，但是每天git add, push, pull的却没有真正花时间去了解一下Git原理，这周的主题我来看看Git的入门原理。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
+<p>如果我们想本地新建一个git项目的话，运行上面命令进行初始化，这个命令背后实际在当前目录下创建一个.git的子目录，用来保存版本信息，进入.git目录看看里面都有哪些东西<br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fwb7xmfbiyj20n80f8wiv.jpg" alt=""></p>
+<p>粗略看一眼，里面有branch, hooks, logs, HEAD等信息，大概知道它们用来储存什么。</p>
+<h3 id="暂存区"><a href="#暂存区" class="headerlink" title="暂存区"></a>暂存区</h3><p>所有在git项目内有变动的内容，git都会把它们暂时存在一个地方，叫做“暂存区”，英文index或者stage.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git update-index --add --cacheinfo 100644 \</span><br></pre></td></tr></table></figure>
+<p>上面这个命令用来在index里记录一个变动的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git ls-files --stage</span><br></pre></td></tr></table></figure>
+<p>上面这个命令用来显示暂存区里的东西，同时会显示出文件名 + 二进制对象名 + 权限。 知道了二进制对象名，就可以在.git/objects目录里读出这个文件的内容了</p>
+<h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><p>如果每次都更新暂存区，那文件一多就太麻烦了，于是git提供了一个简化版的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add --all</span><br></pre></td></tr></table></figure>
+<p>这个命令相当于，对所有当前项目中有改变的文件，保存为object，然后添加到index. </p>
+<h3 id="commit"><a href="#commit" class="headerlink" title="commit"></a>commit</h3><p>当我们完成一个功能之后，需要把改动的代码一起生成一个快照，写到git历史中。git的历史由不同时间点的快照组成，也就是我们平时在sourceTree中看到的</p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fwb8os7olqj216c0s4woz.jpg" alt=""></p>
+<p>我们可以把项目恢复到任意一个节点快照。每个节点快照称作一个commit.<br>快照 = 保存当前的目录结构，以及每个文件对应的二进制对象。</p>
+<h3 id="git-commit"><a href="#git-commit" class="headerlink" title="git commit"></a>git commit</h3><p>使用git commit命令，可以同时提交目录结构 + index文件 + 快照说明<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m &quot;first commit&quot;</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-log原理"><a href="#git-log原理" class="headerlink" title="git log原理"></a>git log原理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 查找head指针对应的分支</span><br><span class="line">2. 找到指针指向的快照</span><br><span class="line">3. 找到父节点，也就是前一个快照</span><br><span class="line">4. 以此类推，显示当前分支的所有快照</span><br></pre></td></tr></table></figure>
+]]></content>
+      
+        <categories>
+            
+            <category> Tech </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Rampus Painting]]></title>
+      <url>/2018/10/08/Rampus-Painting/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vbz1qbwj22c03401l0.jpg" alt=""><br><a id="more"></a></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vbzrdvjj22c03401l0.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vby1dsnj22c0340hdv.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vbyiojfj22c0340hdv.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vbx0984j20u0140dis.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vbwzy1kj20u0140gpn.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0vbx49kaj20u0140dnp.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Motorcycle Meetup 2018-10-05]]></title>
+      <url>/2018/10/08/Motorcycle-Meetup-2018-10-05/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0v2j0vnkj20m80gon0c.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0v2j1do7j20go0m8din.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0v2jmxofj23402c0x6p.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0v2ja12ej20u00u0qcu.jpg" alt=""></p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw0v6lbvubj214q0tzq7g.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Motorcycle </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[洗碗机购买记录 - 解放劳动力]]></title>
+      <url>/2018/10/06/%E6%B4%97%E7%A2%97%E6%9C%BA%E8%B4%AD%E4%B9%B0%E8%AE%B0%E5%BD%95-%E8%A7%A3%E6%94%BE%E5%8A%B3%E5%8A%A8%E5%8A%9B/</url>
+      <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><blockquote>
+<p>十一年前，人生的第一份工作，是在墨尔本市中心的一家餐馆洗碗，每天下了课洗5个小时，为了效率我没带手套，长期下来导致双手严重脱皮侵蚀。</p>
+<p>两年前，人生第一次结婚(应该也是最后一次)，每天下班回家做饭吃饭1个小时外加洗碗20分钟，当然我早学乖了戴起手套。</p>
+<p>现在，是时候做个升级，解放这20分钟的洗碗时间了，于是购置洗碗机的计划提上议程</p>
+</blockquote>
+<hr>
+<h3 id="洗碗机的优势"><a href="#洗碗机的优势" class="headerlink" title="洗碗机的优势"></a>洗碗机的优势</h3><ol>
+<li>节省时间，每天可以多出20分钟来做更有意义的事情</li>
+<li>省水，手动洗碗，基本上一次要消耗掉50-70L升水，而洗碗机单次消耗只需10-14升</li>
+<li>省电，手动洗碗的热水，基本靠电加热或者煤气加热，而新西兰的煤气LPG费用高得令人发指，洗碗机单次却只需要0.5kwh的电</li>
+<li>洗得干净，没错，现在工业的发展速度超过我们的想象，洗碗机经过这么久的更新迭代，人手洗不干净的它能洗干净，人手能洗干净的它能洗得更干净</li>
+<li>杀菌消毒，洗碗机能在75°热水的下持续对碗筷进行高温杀菌，而人手是很难忍受超过50°的热水持续刺激的</li>
+</ol>
+<hr>
+<h3 id="对洗碗机的要求"><a href="#对洗碗机的要求" class="headerlink" title="对洗碗机的要求"></a>对洗碗机的要求</h3><p>既然要购置新洗碗机，那么首先要搞清楚自己对洗碗机有哪些硬性需求</p>
+<h4 id="尺寸"><a href="#尺寸" class="headerlink" title="尺寸"></a>尺寸</h4><p>前屋主在装修的时候，预留出的洗碗机位置大概为高850 <em> 宽600 </em> 深600，也就是标准大小，新洗碗机必须同样尺寸</p>
+<h4 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h4><p>作为两口之家，其实4-6套的容量就已经能满足大部分需求，但是考虑到日后孩子出生，父母暂留，以及预留尺寸，所以直接上13-15套容为长久之计</p>
+<h4 id="能耗"><a href="#能耗" class="headerlink" title="能耗"></a>能耗</h4><p>单次用水在12L以内，具备Half-load功能，电能耗在4颗星以上</p>
+<h4 id="烘干"><a href="#烘干" class="headerlink" title="烘干"></a>烘干</h4><p>当前市面上大部分洗碗机在清洗完毕会利用余热烘干碗筷，这对于陶瓷和金属来说烘干效果不错，但是塑料制品却不行，最好的方式是打开洗碗机让湿气自然散去</p>
+<h4 id="价位"><a href="#价位" class="headerlink" title="价位"></a>价位</h4><p>1500 - 2500纽币</p>
+<h4 id="噪音"><a href="#噪音" class="headerlink" title="噪音"></a>噪音</h4><p>越低越好，尽量在45dB以下</p>
+<hr>
+<h3 id="品牌选择"><a href="#品牌选择" class="headerlink" title="品牌选择"></a>品牌选择</h3><p>当前市面上做洗碗机叫得上号的如下</p>
+<ol>
+<li>Bosch</li>
+<li>Smeg</li>
+<li>Miele</li>
+<li>Asko</li>
+<li>SIEMENS</li>
+<li>Panasonic</li>
+<li>美的</li>
+<li>海尔</li>
+</ol>
+<p>其中又以Miele为首，它发明了世界上第一台电动家用洗碗机，长期的技术沉淀以及众多黑科技专利让它成为了洗碗机中的战斗机。Miele自从开创以来不上市不贷款也不融资，可见其底有多厚。</p>
+<p>Bosch和SIEMENS作为第二梯队，性价比也颇高，不过我在店里实际摸过做工以及用料之后，发现还是跟Miele有差距</p>
+<p>Smeg和Asko分别为意大利和瑞士品牌，口碑也还不错但依旧低于Miele</p>
+<p>中国品牌美的海尔就不用多说了，价格低廉，基本500纽币就能到手，但是在体验上还是跟欧美老厂有段距离</p>
+<p>松下作为日系的代表，在家电方面造诣也很深，不过日本人因为条件限制，大部分洗碗机都比较小，没有看到像欧美大厂这类的13-15套。</p>
+<p>一番筛选，目标锁定Miele，除了价格略高，没有其他缺点</p>
+<hr>
+<h3 id="型号确定"><a href="#型号确定" class="headerlink" title="型号确定"></a>型号确定</h3><p>需求和品牌确定了，基本就完成了50%了，剩下就是在Miele的官网对比参数以及功能。<br>Miele在澳新市场，有G4000和G6000两个系列，入门的G4000为捷克制造，而高端一些的G6000系列则为德国原产。</p>
+<p>其中G6000系列全系都有Auto-open功能，也就是在洗碗完毕，机器会自动打开洗碗机门（保持一个小角度），让腔体内的热气自然散去，达到完美烘干效果(即使是塑料碗筷也全干)。这是为将来的孩子出生考虑，毕竟奶品婴儿碗多以无毒塑料为主。</p>
+<p>Cutlery Tray功能对于华人家庭相当实用，由于华人家庭多使用筷子，如果都竖直放在Cutlery basket里的话，很容易通过底部的孔滑出。而Cutlery tray则允许刀叉筷子刀具全部平铺展开，解决了筷子脱落的问题，并且收纳更加方便了，如下图所示。</p>
+<p><img src="https://www.daringgourmet.com/wp-content/uploads/2018/04/Miele-Dishwasher-6-728x546.jpg" alt=""></p>
+<p>G6000系列具备6种清洁模式，ECO省水省电，Automatic自动检测碗筷量，Intensive用75°的高温来清洁，适合比较脏的碗筷甚至抽油烟机滤网，Normal普通模式55°热水，Gental模式适合洗红酒杯等相对脆弱的陶瓷，同时比G4000多出了Quick PowerWash功能，它可以在50分钟左右把碗筷强力洗净</p>
+<p>在了解了2个系列的参数差距后，最后来看一下价格，G4930 = $1799刀； G6620 = $2199刀。<br>$400的差价，多出了‘德国原产’ + ‘Auto-open’ + ‘Quick PowerWash’ + ‘红酒杯架’这四个功能。于是咬咬牙入手了G6620， 2199刀的价格包送货上门。</p>
+<hr>
+<h3 id="后期耗材"><a href="#后期耗材" class="headerlink" title="后期耗材"></a>后期耗材</h3><p>简单来说，洗碗机一共有4种后期耗材，但不是每个都必须用的</p>
+<ol>
+<li>洗涤块<br>用来去除餐具上的食物残留和油腻，非常容易溶解。主要成为为碳酸钠，柠檬酸钠，过碳酸钠，酶制剂和表面活性剂，一般购买Finish牌子，超市里都有卖，分为4个系列，一次为Classic, All in one, Quantum， Quantum Ultimate. 其中又以Quantum Ultimate的清洁效果最佳，但是价格也最贵，平均一个洗涤块要0.35纽币，当然也可以使用洗涤粉，价格就便宜多了，2KG的一瓶只需要8刀，按照每次使用20g来算的话，一天只要0.08纽币<br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fvzgq7nolkj21cm0wodmz.jpg" alt=""></li>
+</ol>
+<ol>
+<li>漂洗剂<br>防止水点，水迹，水碱在玻璃以及碗碟上的行程，加速干燥，成分为5%-15%的非离子表面活性剂， 5%聚羧酸锌，不用每次都加，一般加满之后可以用很久，直到用完，机器会提醒的。<br>价格为500ML = 6纽币，用个半年问题不大，算下来一个月1纽币<br><img src="http://ww1.sinaimg.cn/large/929aa310ly1fvzgq7qitfj21eq11on64.jpg" alt=""></li>
+</ol>
+<ol>
+<li><p>软水盐<br>软化水质，防止水垢行程，减少洗碗机内部零件的磨损，延长洗碗机使用寿命，但是新西兰的水质本身就属于软水，所以实际使用中完全不必要加。中国南方的话，普遍用的是河流水，水质也偏软，视具体情况而定加或者不加，但是北方的话就必须要用软水盐了，因为北方普遍使用的是地下水，相对的钙离子成分较高。</p>
+</li>
+<li><p>自洁剂<br>最后就是洗碗机的自洁剂了，官方推荐是每个月用它来把洗碗机深度清洁一次，一瓶大概6纽币吧，打开后倒扣在洗碗机里，然后运行一个清洁程序就好。实际使用中，每3个月用一次就足够了。</p>
+</li>
+</ol>
+<hr>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li><p>洗涤块不能用洗洁精代替，因为他们的原理是完全不同的，洗涤块主要是低泡洗涤剂，通过酶来分解污渍。另外洗洁精在冲洗过程中会产生大量的泡沫，有可能会向外溢出导致警报。洗碗机的工作原理是水泵抽起聚集在底部的水，然后雾状喷洒在餐具上，如果泡沫进入水泵中会损伤水泵。</p>
+</li>
+<li><p>洗涤块，漂洗剂，软水盐的位置不要搞错了，有发生过搞错位置的，容易损伤机器。</p>
+</li>
+<li><p>安装的时候，插头不能直接坐在机器的后方，建议是在侧面的水池下方，进水管可以接冷水也可以直接从热水管接。不差钱的可以直接付149纽币让Miele专业人员在送货的时候一起装了。这样可以确保2年保修不受影响。</p>
+</li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> Life </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[学习笔记 - 2018年10月第二周 - MySQL优化 & 前端优化]]></title>
+      <url>/2018/10/05/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2018%E5%B9%B410%E6%9C%88%E7%AC%AC%E4%BA%8C%E5%91%A8/</url>
+      <content type="html"><![CDATA[<h2 id="MYSQL优化"><a href="#MYSQL优化" class="headerlink" title="MYSQL优化"></a>MYSQL优化</h2><h3 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h3><ol>
+<li><p>字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。</p>
+</li>
+<li><p>数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256</p>
+</li>
+</ol>
+<h3 id="SQL语句优化"><a href="#SQL语句优化" class="headerlink" title="SQL语句优化"></a>SQL语句优化</h3><p>MySQL性能优化其中很重要的就是SQL语句的优化，比如使用index</p>
+<h3 id="分表"><a href="#分表" class="headerlink" title="分表"></a>分表</h3><p>当数据库变得庞大的时候(比如超过200万条数据)，就可以考虑分表了</p>
+<h3 id="数据库参数配置"><a href="#数据库参数配置" class="headerlink" title="数据库参数配置"></a>数据库参数配置</h3><p>合理的配置数据库服务系统，可以有效提升数据库性能，比如最大连接数，数据库占用内存等配置。mysql的这些参数都有默认配置，但是默认配置不一定是最适合的，需要根据程序的特性和硬件状况对配置进行调整。</p>
+<h3 id="主从复制，读写分离"><a href="#主从复制，读写分离" class="headerlink" title="主从复制，读写分离"></a>主从复制，读写分离</h3><p>只有一台MySQL服务器无法支持大并发，所以遇到同时间访问暴增的情况，一台服务器处理不过来，所以增加MySQL服务器也是一种有效的增强性能方式。<br>可以配置主从复制，CUD走Master服务器，R走Slaver服务器，这样就把压力分散开了。</p>
+<h3 id="增加缓存"><a href="#增加缓存" class="headerlink" title="增加缓存"></a>增加缓存</h3><p>用Redis， Memcache，elasticsearch等缓存层，可以减少数据库的连接。</p>
+<h3 id="升级硬件"><a href="#升级硬件" class="headerlink" title="升级硬件"></a>升级硬件</h3><p>土豪做法，当上面的几个方式都用过但是性能依旧有瓶颈的时候，就花钱升级硬件吧。更牛逼的CPU，更大的内存，更大的网络带宽。</p>
+<hr>
+<h3 id="MySQL军规"><a href="#MySQL军规" class="headerlink" title="MySQL军规"></a>MySQL军规</h3><h4 id="核心军规"><a href="#核心军规" class="headerlink" title="核心军规"></a>核心军规</h4><ol>
+<li>尽量不在数据库做运算</li>
+<li>控制表单数据量，纯INT不超过10M条，含Char不超过5M条</li>
+<li>保持数据表slim</li>
+<li>平衡范式和冗余</li>
+<li>拒绝大SQL， 复杂事物，大批量任务</li>
+</ol>
+<h4 id="字段类军规"><a href="#字段类军规" class="headerlink" title="字段类军规"></a>字段类军规</h4><ol>
+<li>用好数值字段，尽量简化字段位数</li>
+<li>把字符转化为数字</li>
+<li>优先使用Enum或者set</li>
+<li>避免使用null字段</li>
+<li>少用并拆分Text/blog</li>
+<li>不在数据库中存图片</li>
+</ol>
+<h4 id="索引类军规"><a href="#索引类军规" class="headerlink" title="索引类军规"></a>索引类军规</h4><ol>
+<li>谨慎合理添加索引</li>
+<li>字符字段必须建立前缀索引</li>
+<li>不在索引列做运算</li>
+<li>自增列或者全局ID做InnoDB主键</li>
+<li>尽量不用外键</li>
+</ol>
+<p>SQL类军规</p>
+<ol>
+<li>SQL尽可能简单</li>
+<li>保持事物连接短小</li>
+<li>尽可能避免使用SP/Trigger/Function</li>
+<li>尽可能不要用Select *</li>
+<li>改写Or为IN()</li>
+<li>改写Or为Union</li>
+<li>避免负向查询和%前缀模糊查询</li>
+<li>Count不要使用在可null的字段上</li>
+<li>减少count(*)</li>
+<li>Limit高效分页</li>
+<li>用Union ALL替代Union</li>
+<li>分解链接，保证高并发</li>
+<li>Group by去除排序</li>
+<li>同数据类型的列值比较</li>
+<li>load Data导入数据，比Insert快20倍</li>
+<li>打散大批量更新，尽量凌晨操作</li>
+</ol>
+<h4 id="约定类军规"><a href="#约定类军规" class="headerlink" title="约定类军规"></a>约定类军规</h4><ol>
+<li>隔离线上线下</li>
+<li>禁止未经DBA认证的子查询</li>
+<li>永远不在程序段显式加锁</li>
+<li>同意字符集为UTF-8，统一命名规范</li>
+</ol>
+<hr>
+<h2 id="前端优化"><a href="#前端优化" class="headerlink" title="前端优化"></a>前端优化</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><blockquote>
+<p>最近IEMALL项目稳步向前推进，主体功能不断迭代优化，进而开始把注意力转移一部分到前端的优化 - 如何能在不影响功能的基础上，最大程度提升用户体验。</p>
+</blockquote>
+<h3 id="首屏优化"><a href="#首屏优化" class="headerlink" title="首屏优化"></a>首屏优化</h3><p>作为用户的第一印象，首页的载入速度至关重要, 特别是可视区域，尽可能的缩短这个步骤的耗时。能让用户满意度大幅提升，下面我粗糙对比了一下我们当前项目和某相似竞争产品之间的首页载入时间。</p>
+<p>竞争对手的首页载入速度</p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw42qumxsoj21260putfg.jpg" alt=""></p>
+<p>我们的首页载入速度</p>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw42quky8hj20ww0pygqp.jpg" alt=""></p>
+<p>列个表来对比一下具体区别（A = 竞品; B = 我们）</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:center">A</th>
+<th style="text-align:center">B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务器位置</td>
+<td style="text-align:center">澳大利亚</td>
+<td style="text-align:center">香港</td>
+</tr>
+<tr>
+<td>首页载入时间</td>
+<td style="text-align:center">54.6s</td>
+<td style="text-align:center">19.17s</td>
+</tr>
+<tr>
+<td>DOM载入时间</td>
+<td style="text-align:center">2.21s</td>
+<td style="text-align:center">2.17s</td>
+</tr>
+<tr>
+<td>接口数</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">11</td>
+</tr>
+<tr>
+<td>图片数</td>
+<td style="text-align:center">55</td>
+<td style="text-align:center">36</td>
+</tr>
+<tr>
+<td>js数</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td>css数</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td>总大小</td>
+<td style="text-align:center">20.7M</td>
+<td style="text-align:center">1.1MB</td>
+</tr>
+</tbody>
+</table>
+<p>可以直观看出，我们的首页还是有优势的。其中首屏60%以上的大小都是由图片构成的，所以图片加载至关重要，A在首页直接载入了所有图片，包括那些需要翻页五六次的产品图，而我们采取了懒加载 - 仅仅当用户下拉至预设位置才开始载入新图片。<br>再来看每张图片的大小， 同样是用来显示商品的thumbnail图，A的平均图片大小是381km, B的平均图片大小是48.5kb.</p>
+<h3 id="第三方按需加载"><a href="#第三方按需加载" class="headerlink" title="第三方按需加载"></a>第三方按需加载</h3><p>在这个项目中，我们用的是vant-ui框架，根据按需加载的原则，我们避免使用下方的方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import vant from &apos;vant-ui&apos;</span><br></pre></td></tr></table></figure></p>
+<p>这种全部引入的方式会导致js文件过大，取而代之的，可以只在每个组件里引入它对应需要用的ui控件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;swipe, Sku, ImagePreview, Tag, Toast&#125; from &apos;vant&apos;</span><br></pre></td></tr></table></figure></p>
+<h3 id="路由懒加载"><a href="#路由懒加载" class="headerlink" title="路由懒加载"></a>路由懒加载</h3><p>路由懒加载也叫做延迟加载，随用随载，vue这类的SPA程序，如果没用路由懒加载，会导致webpack打包出来的体积略大，这样用户在首次加载网页的时候，需要下载的东西过大，导致屏幕留白时间过长，影响用户体验，进而导致客源流失。</p>
+<p>vue官方也推荐使用路由懒加载的方式优化项目</p>
+<blockquote>
+<p><a href="https://router.vuejs.org/guide/advanced/lazy-loading.html#grouping-components-in-the-same-chunk" target="_blank" rel="noopener">https://router.vuejs.org/guide/advanced/lazy-loading.html#grouping-components-in-the-same-chunk</a></p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> Tech </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[学习笔记 - 2018年10月第一周 - 包管理工具]]></title>
+      <url>/2018/10/01/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2018%E5%B9%B410%E6%9C%88%E7%AC%AC%E4%B8%80%E5%91%A8/</url>
+      <content type="html"><![CDATA[<h3 id="NPM和YARN区别"><a href="#NPM和YARN区别" class="headerlink" title="NPM和YARN区别"></a>NPM和YARN区别</h3><p>NPM和YARN是目前js中比较流行的包管理工具，经常在项目中使用来负责管理依赖。但是光会用却不知道原理，那今天就了解一下NPM和YARN的区别和优缺点。</p>
+<h4 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h4><p>YARN的速度较NPM更快一点，因为它采用并行安装的方式，NPM按顺序一个一个安装，YARN则一锅端并行安装，不过在中国大陆因为某些你懂得原因，还是用NPM淘宝镜像快一点</p>
+<h4 id="离线模式"><a href="#离线模式" class="headerlink" title="离线模式"></a>离线模式</h4><p>YARN相较NPM多了一个离线模式，安装过的软件包不用重新下载</p>
+<h4 id="输出简洁"><a href="#输出简洁" class="headerlink" title="输出简洁"></a>输出简洁</h4><p>YARN在命令行里的输出信息相对比较简洁，并且结合了emoji看起来更直观一点</p>
+<h4 id="安装中断"><a href="#安装中断" class="headerlink" title="安装中断"></a>安装中断</h4><p>安装过程中如果一个包失败，NPM会导致整个安装失败，而YARN则会自动尝试重新安装</p>
+<h4 id="文件大小"><a href="#文件大小" class="headerlink" title="文件大小"></a>文件大小</h4><p>YARN的文件包相比NPM更小了点</p>
+<h4 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h4><p>相较于NPM INSTALL/UNINSTALL, YARN使用yarn add/remove, 看起来感觉更接地气了一点</p>
+<p>总得来说YARN似乎优点多多，毕竟是几个大厂Facebook + Google等一起开发的</p>
+<h3 id="npm-run-build背后发生了什么"><a href="#npm-run-build背后发生了什么" class="headerlink" title="npm run build背后发生了什么"></a>npm run build背后发生了什么</h3><ol>
+<li><p>执行npm run build命令的时候，会执行package.json文件里的script下对应的脚本，可以看到它是”build”: “node build/build.js”</p>
+</li>
+<li><p>运行build.js内的脚本，设置环境为’production’, 然后引入终端显示用的旋转插件，引入用于删除文件夹用的插件以及终端文字颜色插件</p>
+</li>
+<li><p>Webpack构建打包，同时在终端显示信息（开始，build完成之类），如果出错则显示报错</p>
+</li>
+</ol>
+<h3 id="js-css压缩原理"><a href="#js-css压缩原理" class="headerlink" title="js css压缩原理"></a>js css压缩原理</h3><p>本质上是把多个js和css整合成一个，并且删去了空格，注释，换行，tab之类的东西，这也就是为什么我在浏览器console里查看js的时候，经常看到的是一堆拥挤的代码。</p>
+<p>我们在写js的时候，会把变量名取得更加有意义，比如‘是否为默认’ = ‘isDefault’, 但是对于机器来说，变量是isDefault或者a都一样，所以webpac之类的打包工具在压缩js的时候会把变量名都替换成更小体积的字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var isDefault = true</span><br></pre></td></tr></table></figure>
+<p>压缩成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var a=true</span><br></pre></td></tr></table></figure></p>
+<h3 id="js继承-amp-原型链"><a href="#js继承-amp-原型链" class="headerlink" title="js继承 &amp; 原型链"></a>js继承 &amp; 原型链</h3><p>这个topic看了一圈觉得并不是很懂，个人感觉还是需要从js的基础往上看，因为平时工作中只是用到js的各种api，这里建议至少先弄懂es6和es5的区别, 这部分知识需补足。<br>阮一峰的js教程不错：<a href="https://wangdoc.com/javascript/index.html" target="_blank" rel="noopener">https://wangdoc.com/javascript/index.html</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Tech </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[How to replace mail box wood post]]></title>
+      <url>/2018/07/03/How-to-replace-mail-box-wood-post/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd3ttdzj21400u010n.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd3m24jj20u0140n27.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd3m5qxj21400u0aec.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd3nw8cj20u01400yc.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd54sa8j21400u07dw.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd3srrnj20u0140dpe.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd3o281j21400u0afd.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd57dnmj21400u0n7n.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd56dlij20u0140gw2.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswtd5d3poj20u0140wp7.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[How to replace iphone SE charging port]]></title>
+      <url>/2018/07/03/How-to-replace-iphone-SE-charging-port/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt9b82ohj21400u0gps.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt9b7vr4j21400u0dk5.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt9b8q65j20u0140dk6.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt9bgwpoj20u014078k.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt9b3y2rj20u0140wh8.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[How to polish a wood table]]></title>
+      <url>/2018/07/03/How-to-polish-a-wood-table/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4g7ikyj21400u0jzi.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4ey8zmj20u0140jx3.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4ew211j21400u0799.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4evhd9j20u0140433.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4fzvloj20u01407b2.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4g65cfj20u01407b0.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4eskk6j20u0140q6c.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4evoqcj20u0140djp.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswt4er20xj21400u0ad0.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[[Video]Typical day to work in Auckland - 22062018]]></title>
+      <url>/2018/07/03/Video-Typical-day-to-work-in-Auckland-22062018/</url>
+      <content type="html"><![CDATA[<p><iframe width="560" height="315" src="https://www.youtube.com/embed/Eh07cLqZfPE?rel=0" frameborder="0" allowfullscreen></iframe><br><a id="more"></a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Life </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[如何种植四季豆]]></title>
+      <url>/2018/07/03/%E5%A6%82%E4%BD%95%E7%A7%8D%E6%A4%8D%E5%9B%9B%E5%AD%A3%E8%B1%86/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1ygu9gj21400u0n4f.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1ybipzj21400u0n3e.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1yecb3j21400u0dm3.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1ygvmxj21400u0n3s.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1yiibdj21400u0n4j.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1znrg0j21400u0wma.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswq1yg9gej20u0140dmr.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[How to make monitor stand]]></title>
+      <url>/2018/07/03/How-to-make-monitor-stand/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu6irssj21400u0afb.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu48okyj21400u0gqj.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu53e2yj21400u0dk7.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu5802jj21400u0n22.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu42l8dj20u014041l.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu6isc8j21400u079i.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu59unrj21400u0jvo.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu5cxj9j21400u0djt.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu5bxkyj21400u042b.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu5h1uyj21400u0n0x.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu40jx3j21400u041a.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu412cjj20u0140ad4.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu4159lj20u01400uy.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu6573jj20u0140n0p.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu6ejcwj21400u0gp9.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu43174j21400u077e.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswpu6igwlj21400u0jvy.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[How to make a leather card bag]]></title>
+      <url>/2018/07/03/How-to-make-a-leather-card-bag/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwxtphgj21400u0dls.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwxw0yjj21400u0dlr.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwxlu7cj21400u077v.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwxsbe1j20u01400ws.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwxufnqj20u0140wk3.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwxv9phj21400u0n31.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwz90phj21400u0wk9.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwzgq4qj21400u0n2m.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwzi7pdj20u01400y9.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwzlqhoj20u0140te6.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwzfyftj20u0140dlp.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmwzh8wlj21400u07aa.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmx0zl0bj21400u0q99.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmx1bvgej20u0140grr.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmx15m20j21400u0tem.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Garage tools wall project]]></title>
+      <url>/2018/07/03/Garage-tools-wall-project/</url>
+      <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq6vh11j21400u0gqx.jpg" alt=""><br><a id="more"></a><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq3urrsj21400u00xi.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq3kfcoj21400u0tbl.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq3f9o4j21400u0aby.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq4t0snj20u0140n0y.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq3kmq6j20u014077i.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq3kqknj21400u0gop.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq3mchij21400u0n0d.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq4zy14j21400u0jus.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq5677wj21400u0tcm.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq6c7byj20u0140ae7.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq573qkj20u0140dk8.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq6h1qrj20u0140wjc.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq5i4w4j20u0140dk4.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq76nmzj20u014079w.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq6m4nrj21400u0wiw.jpg" alt=""><br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fswmq6q6whj20u0140jvt.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> DIY </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[How to clean motorcycle chain]]></title>
+      <url>/2018/07/02/How-to-clean-motorcycle-chain/</url>
+      <content type="html"><![CDATA[<ul>
+<li>Author：Aaron</li>
+<li>Location：Auckland, New Zealand</li>
+</ul>
+<p>Learning how to clean and lube a motorcycle chain is one of the essential step into motorcycle maintainance for new riders. It’s simple as and only takes 20 minutes. In this post, I will quickly show the easiest and cheapest way to clean and lube a motorcycle chain.</p>
+<h3 id="Tools-you-need"><a href="#Tools-you-need" class="headerlink" title="Tools you need"></a>Tools you need</h3><ol>
+<li>Chain clean($22.5 from Motomail)</li>
+<li>Chain lube($22.5 from Motomail)</li>
+<li>Chain brush($27.5 from Motomail, you can also buy from trademe for $9)</li>
+<li>wrench</li>
+<li>Water spray</li>
+<li>Wood block(cut into size)</li>
+</ol>
+<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvhndfmiyj21400u078g.jpg" alt=""><br><a id="more"></a></p>
+<h3 id="Step-1-Lift-rear-wheel-using-wood-block"><a href="#Step-1-Lift-rear-wheel-using-wood-block" class="headerlink" title="Step 1: Lift rear wheel using wood block"></a>Step 1: Lift rear wheel using wood block</h3><p>Ideally you will have a center stand or rear wheel stand, but it cost more than $100, so I am just gonna use a piece of wood to lift the rear wheel. make sure the wheel can spin freely.<br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvo0rl6rvj21400u0djr.jpg" alt=""></p>
+<h3 id="Step-2-Unscrew-chain-cover"><a href="#Step-2-Unscrew-chain-cover" class="headerlink" title="Step 2: Unscrew chain cover"></a>Step 2: Unscrew chain cover</h3><p>Unscrew the cover using wrench<br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvo4t65x9j21400u0ae2.jpg" alt=""></p>
+<h3 id="Step-3-Spray-water-and-chain-cleaner"><a href="#Step-3-Spray-water-and-chain-cleaner" class="headerlink" title="Step 3: Spray water and chain cleaner"></a>Step 3: Spray water and chain cleaner</h3><p>spray a appropriate amount of water to the chain before you spray chain cleaner. at the same time, slowly spin the wheel so whole chain can be covered, for your own safety, DONT START THE ENGINE!!<br>Leave the chain cleaner on for 5 mins.<br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvo5unicoj21400u0djv.jpg" alt=""></p>
+<h3 id="Step-4-Wait-5-mins-and-scrub-using-chain-brush"><a href="#Step-4-Wait-5-mins-and-scrub-using-chain-brush" class="headerlink" title="Step 4: Wait 5 mins and scrub using chain brush"></a>Step 4: Wait 5 mins and scrub using chain brush</h3><p>The chain brush, also called Grunge Brush, is the best tool to scrub grime off the chain. it allows you to clean three side of the chain at once. Hold the brush in position while you spin the rear wheel slowly.<br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvo9vs4iyj20u0140789.jpg" alt=""></p>
+<h3 id="Step-5-Dry-the-chain-using-towel-or-paper-towel"><a href="#Step-5-Dry-the-chain-using-towel-or-paper-towel" class="headerlink" title="Step 5: Dry the chain using towel or paper towel"></a>Step 5: Dry the chain using towel or paper towel</h3><p>Chain lube needs to be applied to dry surface, make sure that all the chain cleaner and water is removed.<br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvodda89oj21400u0aet.jpg" alt=""></p>
+<h3 id="Step-6-Spray-chain-lube"><a href="#Step-6-Spray-chain-lube" class="headerlink" title="Step 6: Spray chain lube"></a>Step 6: Spray chain lube</h3><p>Now the chain is clean and dry, its time to apply chain lubricant. spray evenly to all sides of the chain. the Motul lube I got is in white color so you can clearly see it on the chain.<br><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvohauz5kj21400u0435.jpg" alt=""></p>
+<h3 id="Step-7-Go-for-a-ride"><a href="#Step-7-Go-for-a-ride" class="headerlink" title="Step 7: Go for a ride"></a>Step 7: Go for a ride</h3><p>Congrats you’ve just done a motorcycle chain clean. It’s recommanded to do a regular chain cleaning every 1000KM, or even more often if you ride in wet condition like winter in Auckland:). </p>
+]]></content>
+      
+        <categories>
+            
+            <category> Motorcycle </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[多图记录-新西兰九大徒步路线之Tongariro Northern Circuit]]></title>
+      <url>/2018/02/03/%E5%A4%9A%E5%9B%BE%E8%AE%B0%E5%BD%95-%E6%96%B0%E8%A5%BF%E5%85%B0%E4%B9%9D%E5%A4%A7%E5%BE%92%E6%AD%A5%E8%B7%AF%E7%BA%BF%E4%B9%8BTongariro-Northern-Circuit/</url>
+      <content type="html"><![CDATA[<ul>
+<li>作者：何容</li>
+<li>居住地：奥克兰</li>
+<li>发布时间：2016年2月25日</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这篇图文记录中我总结了一些走’汤加里罗’的经验和需要注意的事项，希望对之后前往的驴友有所帮助。文中图片均不作任何后期处理，尽量以最真实的形式呈现。</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>新西兰境内有数之不尽的徒步路线，但其中最好的九条顶级步道，官方称之为Great walks，3条在新西兰北岛，6条位于南岛。</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517602030/Aaron&#39;s%20Blog/Tongariro/WechatIMG798.jpg" alt=""><br><a id="more"></a></p>
+<p>Tongariro Norther Circuit（汤加里罗北环形步行道）——“极好的步行道”环绕着Tongariro National Park的Ngauruhoe火山。它穿过壮观的火山口、冰川峡谷、色彩绚烂的湖泊和世间仅有的岩石地层。<br>Tongariro的三座核心火山景观是 1887 年 NgatiTuwharetoa 部落酋长 TeHeuheuTukino 四世送给新西兰人民的礼物。他这样做是为了世世代代保护这几座神圣的山峰。<br>Tongariro是新西兰建立的第一个国家公园，也是世界上的第四个国家公园。1993年，公园获得了全球第一个世界遗产双项认证，自然和文化价值得到举世公认。</p>
+<h1 id="行程"><a href="#行程" class="headerlink" title="行程"></a>行程</h1><p>这条Tongariro Norther Circuit顾名思义是一条环形路线，你可以选择顺时针，也可以逆时针完成，这次我们选择了顺时针</p>
+<p>形成安排中，尽量选择天气好的日子，可以看到大部分的风景，天气可以在下面网站查询</p>
+<blockquote>
+<p><a href="http://www.metservice.com/mountain/tongariro-national-park" target="_blank" rel="noopener">http://www.metservice.com/mountain/tongariro-national-park</a></p>
+</blockquote>
+<p>第一天：从起点Whakapapa出发，途径Mangatepopo Hut，到达Oturere Hut入住（20.5KM）</p>
+<p>第二天，从Oturere Hut出发，途径Waihohonu Hut，到达终点（也就是起点）Whakapapa （22.8KM）</p>
+<p>下图中红圈为起点，橙色路线是第一天需要完成的，夜里入住黑圈位置的Oturere Hut，蓝线箭头部分是第二天需要完成的路线, 官方推荐是3-4天完成，但这次我们决定挑战2天走完全程。</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517605024/Aaron&#39;s%20Blog/Tongariro/%E8%B7%AF%E7%BA%BF%E5%9B%BE.png" alt=""></p>
+<p>中间在Red Crater要提升到海拔1900+米<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517605022/Aaron&#39;s%20Blog/Tongariro/%E6%B5%B7%E6%8B%94%E5%9B%BE.png" alt=""></p>
+<h1 id="住宿"><a href="#住宿" class="headerlink" title="住宿"></a>住宿</h1><p>如果你是在每年的大概春秋季节去Tongariro，需要在DOC网站提前定好Hut，链接如下</p>
+<blockquote>
+<p><a href="http://www.doc.govt.nz/tongarironortherncircuit" target="_blank" rel="noopener">http://www.doc.govt.nz/tongarironortherncircuit</a></p>
+</blockquote>
+<p>整个步道有3个Hut，其中Oturere Hut的硬件条件最差（但是可以看到最美的日出），Waihohonu Hut是新建的，所以各方面条件都很不错</p>
+<h1 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h1><p>以下是我这次携带的所有装备</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517605246/Aaron&#39;s%20Blog/Tongariro/IMG_3186.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517605053/Aaron&#39;s%20Blog/Tongariro/WechatIMG802.jpg" alt=""></p>
+<p>提取几个重点装备来说几句</p>
+<h2 id="1-Gregory-Z40背包"><a href="#1-Gregory-Z40背包" class="headerlink" title="(1) Gregory Z40背包"></a>(1) Gregory Z40背包</h2><p>户外徒步，特别是单日以上的徒步，背包的背负性能以及舒适性会直接影响成败</p>
+<p>这次我用的是Gregory Z40背包，容量40升，面料采用210D双钻抗撕裂和330D尼龙牛津平纹织物面料，CrossFlo背负系统，我对比过Osprey的Airspeed背负，在相同负重的情况下，Gregory的背负明显比Osprey舒适</p>
+<p>背包内部物品也是有打包技巧的，简单来说就是重量大的东西尽量贴近身体重心，走平坦地面的时候把背包的重量调节到腰部，上坡时候稍微松一点腰带，拉紧肩带和平衡带让重量适当转移到肩膀</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517606504/Aaron&#39;s%20Blog/Tongariro/WechatIMG803.jpg" alt=""></p>
+<h2 id="2-Danner徒步鞋"><a href="#2-Danner徒步鞋" class="headerlink" title="(2) Danner徒步鞋"></a>(2) Danner徒步鞋</h2><p>Tongariro必备，因为它大量的碎火山石以及地势的起伏导致频繁的爬坡下坡很容易伤到脚步，一般徒步鞋直接买中高帮Gore-tex搭配Vibram大底就行</p>
+<p>Gore-tex虽然透气性一般，但是防水性能强，涉水无压力这双Danner鞋面才用Nubuck全皮材质，Gore-Tex里衬，鞋前用的牛皮包头，可以保护脚趾，Danner Boulder大底TF橡胶。</p>
+<p>Danner，美国的老牌造鞋厂商，因为给美军供应作战鞋而闻名（先前一直保持美国本土制造，但是目前把生产线划分开了，高端系列保留Made in US，中低端已经划分到中国生产）</p>
+<h2 id="3-Black-Diamond登山杖"><a href="#3-Black-Diamond登山杖" class="headerlink" title="(3) Black Diamond登山杖"></a>(3) Black Diamond登山杖</h2><p>登山杖强烈推荐，用登山杖下山可以有效地减少腿部的压力，快速下山的时候，膝盖受到的冲击力约是自身体重的5-8倍，即便一个瘦子，从一座1000米的山上冲下来，膝盖受到的冲击也有成几千次半吨重的力量，同时你还负重10+KG，登山杖能保护膝盖（膝盖的损伤是不可逆的），同时它也可以帮助你保持平衡。</p>
+<p>这个购买Black Diamon或者Leki都可以，一步到位，不建议买碳纤维（虽然轻+硬，但是韧性差，登山杖卡在火山石中容易断）</p>
+<p>另外推荐购买带防震（Anti-Shock），对手腕会有一定的保护</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517606620/Aaron&#39;s%20Blog/Tongariro/112148_trail_pro_shock_ext_web.jpg" alt=""></p>
+<h2 id="4-Marmot-Driclime多用衣"><a href="#4-Marmot-Driclime多用衣" class="headerlink" title="(4) Marmot Driclime多用衣"></a>(4) Marmot Driclime多用衣</h2><p>Marmot，做工用料都不错，这款Marmot Driclime的特点是皮肤衣内衬抓绒材质，这种抓绒不是常见的POLARTEC，而是Marmot自己研发的一种叫做Driclime的材质，保暖快干透气，最关键的是它才280g，在这种重量下拥有抗风，防泼水，保暖，透气四中功能，实用性爆棚，除非是大雨要用到硬壳冲锋衣，否则大部分时候一件Driclime稳稳够了</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517606717/Aaron&#39;s%20Blog/Tongariro/marmot-driclime-windshirt-men_s-2016-black.jpg" alt=""></p>
+<h2 id="5-黑冰鹅绒睡袋"><a href="#5-黑冰鹅绒睡袋" class="headerlink" title="(5) 黑冰鹅绒睡袋"></a>(5) 黑冰鹅绒睡袋</h2><p>夜里睡在Hut里只有床垫，所以必须要自带睡袋，推荐鹅绒木乃伊睡袋，鹅绒与鸭绒相比，蓬松性好，保暖性强，最主要的是鹅绒睡袋没有鸭绒睡袋的那股腥臊味（鸭子是杂食动物，鹅是草食动物）</p>
+<p>市面上Marmot; The North Face; Sea to Summit等其他大牌都蛮不错.另外中国牌子黑冰性价比也不错，G400鹅绒，充绒量400g，舒适温度5°左右，极限温度0°,重量也不到1KG</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517606833/Aaron&#39;s%20Blog/Tongariro/mobile01-00c2ee91c50083d4c9ec4babdb848638.jpg" alt=""></p>
+<h2 id="6-水袋"><a href="#6-水袋" class="headerlink" title="(6) 水袋"></a>(6) 水袋</h2><p>方便在路程中及时补水，另外水袋装满水之后可以放在背包的水袋区，相比起用瓶子装水放在背包两边的袋子，更加贴近身体，使得背负轻松些</p>
+<p>水袋可以买Platypus(不佩吸嘴盖，需要额外买,大开口设计易于清洗，咬嘴设计人性化)或者CamelBak</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1517606872/Aaron&#39;s%20Blog/Tongariro/866421.jpg" alt=""></p>
+<h2 id="7-Craghoppers硬壳冲锋衣"><a href="#7-Craghoppers硬壳冲锋衣" class="headerlink" title="(7) Craghoppers硬壳冲锋衣"></a>(7) Craghoppers硬壳冲锋衣</h2><p>虽然说夏天用上的几率不大，但是还是建议带一件在包里，因为Tongariro的天气变化较快，在遇到大风大雨的时候用处就大了</p>
+<p>要求高的可以直接上加拿大的始祖鸟，但是价格也稍贵</p>
+<p>这次带的Craghoppers冲锋衣，来自英国，也是野外生存的贝爷合作的牌子，在Craghoppers前面加了一个名字缩写BG, 全衣采用“AquaDry”面料，具有防水、耐磨、速干、抗紫外线等优点，内部接缝全压胶处理，主拉链和口袋拉链均采用防水拉链，可以达到完全防水的效果。肩膀和肘部等部位均采用耐磨面料加强</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517607035/Aaron&#39;s%20Blog/Tongariro/WechatIMG804.jpg" alt=""></p>
+<h2 id="8-Exofficio户外内裤"><a href="#8-Exofficio户外内裤" class="headerlink" title="(8) Exofficio户外内裤"></a>(8) Exofficio户外内裤</h2><p>在山里没有条件洗澡，也不方便换内衣，所以一条速干防菌的内裤是有多么重要</p>
+<p>Exofficio是世界第一的速干品牌，这款内裤的Give-N-Go面料超级通风透气，排汗速干和专利的Aegis Microbe Shield超强抗菌去味功能，经过非洲野生动物基金会实地测试认证，被推荐为最佳户外内裤.</p>
+<p>他们有一个著名的广告语：”17 countries. 6 weeks. One pair of award-winning underwear. (Ok, maybe two.)“</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517607089/Aaron&#39;s%20Blog/Tongariro/MD-20708_20160614112619_874359b52980a213.jpg" alt=""></p>
+<h2 id="9-垃圾袋"><a href="#9-垃圾袋" class="headerlink" title="(9) 垃圾袋"></a>(9) 垃圾袋</h2><p>也是非常重要的一点，所有在徒步过程中产生的垃圾要自己带走，包括夜里睡觉的Hut也是不提供扔垃圾的地方的</p>
+<h1 id="食物"><a href="#食物" class="headerlink" title="食物"></a>食物</h1><p>因为可背负的东西有限，所以必须提前安排好所带的食物</p>
+<p>巧克力棒：在爬山之后，巧克力能及时补充肌肉中消耗的糖元，帮助恢复体力。一块50克重的巧克力所提供的能量约为200千卡.</p>
+<p>面食： 提供丰富的碳水化合物，碳水化合物是很容易被身体吸收，转化成人体所需能量的，所以是户外很好的选择，一般碳水化合物占食物摄入量的65%左右，除了面食，还可以从大米，水果蔬菜中获取</p>
+<p>香蕉：补充微量元素，富含钾</p>
+<p>橘子:补充维C</p>
+<p>坚果类食物：可以带一点在身上，随手吃，补充微量元素和维生素</p>
+<p>水：少量多次喝水，不要等到口渴才喝，否则身体已处于脱水状态，导致中暑</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517607262/Aaron&#39;s%20Blog/Tongariro/WechatIMG805.jpg" alt=""></p>
+<p>尽量避免在户外吃多脂肪的东西，因为脂肪释放能量相对慢，而且当胃里有脂肪存在时，消化速度会减慢，导致其他食物的吸收减慢</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>从奥克兰到Tongariro National Park大概340KM，Google Map估计驾驶时间4小时左右，为了能够在第二天早上正常开始我们的徒步，我们一行三人在前一天傍晚4:30pm左右从奥克兰驱车南下，一路天气都不错<br>途中看到一辆车底朝天翻到路边的沟里，小路路窄，开车还是要小心</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517607358/Aaron&#39;s%20Blog/Tongariro/IMG_3200.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517607462/Aaron&#39;s%20Blog/Tongariro/IMG_3215.jpg" alt=""><br>到达YHA Backpacker的时候已经是夜里9点左右了, Backpacker一个房间住10个来自不同国家的背包客，基本上都是第二天要挑战Tongariro的，夜里房间太闷热，我们三人基本只睡了2-3个小时，第二天一大早我们起床，到楼下刷牙洗脸，然后到厨房吃饭</p>
+<p>吃过早饭之后，来到前台check out, 然后三个人在backpacker门口的桌子上把背包重新打包了一下，来个合照<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517607604/Aaron&#39;s%20Blog/Tongariro/IMG_3227.jpg" alt=""></p>
+<p>从backpacker驱车15分钟来到山脚下, 步道起点Whakapapa的牌子和路线图<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517607684/Aaron&#39;s%20Blog/Tongariro/IMG_3239.jpg" alt=""></p>
+<p>出发，天气相当好，远方的Mount Ngauruhoe<br><img src="http://res.cloudinary.com/hr799/image/upload/v1517607760/Aaron&#39;s%20Blog/Tongariro/IMG_3249.jpg" alt=""></p>
+<p>从起点Whakapapa到Mangatepopo Hut之间的9km需要花费大概3个小时，走不了多久就可以看到一个牌子，往左边走是去往Mangatepopo Hut,往前走40分钟是一条道去Taranaki Falls，我们选择了拐道去看瀑布</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517607908/Aaron&#39;s%20Blog/Tongariro/WechatIMG806.jpg" alt=""></p>
+<p>一路边走边聊，Taranaki Falls显现在远方<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517607964/Aaron&#39;s%20Blog/Tongariro/IMG_3285.jpg" alt=""><br><img src="http://res.cloudinary.com/hr799/image/upload/v1517607979/Aaron&#39;s%20Blog/Tongariro/IMG_3286.jpg" alt=""><br><img src="http://res.cloudinary.com/hr799/image/upload/a_0/v1517608068/Aaron&#39;s%20Blog/Tongariro/IMG_3291.jpg" alt=""></p>
+<p>欣赏完了Taranaki瀑布，我们原路返回，继续whakapapa到Mangatepopo Hut之间的路程</p>
+<p>同行的驴友 - 静静<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517608403/Aaron&#39;s%20Blog/Tongariro/IMG_3358.jpg" alt=""><br>同行的驴友 - 小张<br><img src="https://res.cloudinary.com/hr799/image/upload/a_0/v1517608436/Aaron&#39;s%20Blog/Tongariro/IMG_3355.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517608447/Aaron&#39;s%20Blog/Tongariro/IMG_3350.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517608498/Aaron&#39;s%20Blog/Tongariro/IMG_3366.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517608552/Aaron&#39;s%20Blog/Tongariro/IMG_3369.jpg" alt=""></p>
+<p>部分路段泥泞<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517608827/Aaron&#39;s%20Blog/Tongariro/IMG_3395.jpg" alt=""></p>
+<p>在行走了两个小时后，我们找了个阴凉处席地而坐，补充一些能量<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517608917/Aaron&#39;s%20Blog/Tongariro/IMG_3392.jpg" alt=""></p>
+<p>继续上路，回头看看身后的Ruapehu</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517608978/Aaron&#39;s%20Blog/Tongariro/IMG_3429.jpg" alt=""></p>
+<p>抓拍一张蜻蜓<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517608999/Aaron&#39;s%20Blog/Tongariro/IMG_3422.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517609144/Aaron&#39;s%20Blog/Tongariro/IMG_3447.jpg" alt=""></p>
+<p>接近9个公里左右，看到远处白色的Mangatepopo Hut<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517609235/Aaron&#39;s%20Blog/Tongariro/IMG_3436.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517609250/Aaron&#39;s%20Blog/Tongariro/IMG_3450.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517609255/Aaron&#39;s%20Blog/Tongariro/IMG_3460.jpg" alt=""></p>
+<p>到了第一个Hut，稍作休息，脱掉了厚重的徒步靴，袜子，Gaiters，放下了背包，登山杖，我同时还把下半截裤腿摘下晾晒（在Gaiters包裹了近5个小时之后，小腿部分的裤管已经被汗水浸湿透了，这里才发现一个防水透气的Gaiter有多么重要）<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517609316/Aaron&#39;s%20Blog/Tongariro/WechatIMG807.jpg" alt=""></p>
+<p>同时另一波驴友也到了，大家在Deck上</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517609275/Aaron&#39;s%20Blog/Tongariro/IMG_3464.jpg" alt=""><br>我从背包夹层中抽出水袋，检查了水位，2L的水袋已经只剩下1L不到了，而今天还有6个小时的路要走，庆幸自己另外还带了一瓶1L的矿泉水，应该可以撑到下一个Hut再补水了</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517609340/Aaron&#39;s%20Blog/Tongariro/IMG_3462.jpg" alt=""></p>
+<p>重新上路<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517609607/Aaron&#39;s%20Blog/Tongariro/IMG_3467.jpg" alt=""><br>迎面而来的几位驴友是走一天的Crossing的，Say hi<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517610485/Aaron&#39;s%20Blog/Tongariro/IMG_3473.jpg" alt=""><br>在一段不算陡峭的海拔提升之后，我们进入了一段最好走的步道，四周围全都是山围绕<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517610529/Aaron&#39;s%20Blog/Tongariro/IMG_3478.jpg" alt=""></p>
+<p>Ngauhoe火山</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517610606/Aaron&#39;s%20Blog/Tongariro/IMG_3480.jpg" alt=""><br>回头看看走过的路<br><img src="http://res.cloudinary.com/hr799/image/upload/v1517610609/Aaron&#39;s%20Blog/Tongariro/IMG_3481.jpg" alt=""></p>
+<p>太阳直射，虽然我们三人已经做好了防晒措施，长袖UPF 50+，但是身处这种环境，依旧热得满身汗.<br>再往前走没多久，就可以看到一个厕所，接下来的几个小时，是没有厕所的<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517610738/Aaron&#39;s%20Blog/Tongariro/IMG_3490.jpg" alt=""><br>前方100米左右是一个方向标，左拐可以去看Soda Spring，直走就是往Red Crater方向了<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517610733/Aaron&#39;s%20Blog/Tongariro/IMG_3491.jpg" alt=""><br>同时还有一个警示牌，“如果你还没有完全准备好，或者天气不够好，建议你在此停止，返回，因为接下来的步道难度逐渐增大”<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517610749/Aaron&#39;s%20Blog/Tongariro/IMG_3494.jpg" alt=""><br>我们当然不会返回，继续前进，然后就是不停的爬坡<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517610779/Aaron&#39;s%20Blog/Tongariro/IMG_3497.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517610914/Aaron&#39;s%20Blog/Tongariro/IMG_3500.jpg" alt=""><br>基本上是爬过了十几个坡，以为再翻一个山就可以是平路的时候，发现前方依然有不明数量的山头在等着你,这就是官方所谓的Devil Staircase（魔鬼阶梯）。再加上炎热的天气和身上20KG左右的负重，消耗了大量的体力。</p>
+<p>终于在爬完了所有坡后，看到了一个方向标，右拐可以挑战登顶Ngauruhoe火山，来回需要3个小时，考虑到我们还要在天黑之前赶到Oturere Hut，我们一行选择了继续前行</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517610997/Aaron&#39;s%20Blog/Tongariro/IMG_3504.jpg" alt=""><br>这时前方终于出现了一片平路，不过平路之后又是一段爬坡，如图所示，我们要先爬到红圈A点，然后再沿着爬到红圈B点</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517611077/Aaron&#39;s%20Blog/Tongariro/WechatIMG808.jpg" alt=""></p>
+<p>爬到A点时候的景象，相机广角有限所以请多谅解<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611103/Aaron&#39;s%20Blog/Tongariro/IMG_3527.jpg" alt=""><br>继续左拐往B点爬升<br><img src="http://res.cloudinary.com/hr799/image/upload/v1517611117/Aaron&#39;s%20Blog/Tongariro/IMG_3537.jpg" alt=""><br>全是碎火山石，这个时候要注意落脚，和登山杖的搭配，脚一定要确定站稳了，再发力，否则很可能打滑<br><img src="https://res.cloudinary.com/hr799/image/upload/a_0/v1517615948/Aaron&#39;s%20Blog/Tongariro/%E7%85%A7%E7%89%87_16-2-21_17_54_00.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611319/Aaron&#39;s%20Blog/Tongariro/IMG_3538.jpg" alt=""><br>登到B点之后，立着一个牌子，告诉你往左边可以选择挑战登顶Mt Tongariro，来回一个半小时<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611400/Aaron&#39;s%20Blog/Tongariro/IMG_3539.jpg" alt=""><br>直走就可以到达整个徒步路线最高点Red Crater了</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517611432/Aaron&#39;s%20Blog/Tongariro/IMG_3545.jpg" alt=""><br>远眺可以看到蓝湖<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611592/Aaron&#39;s%20Blog/Tongariro/IMG_3550.jpg" alt=""></p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517611603/Aaron&#39;s%20Blog/Tongariro/IMG_3546.jpg" alt=""></p>
+<p>山顶的风太大，我们都从背包里拿出了防风衣/软壳<br>这时已经是傍晚了，我们稍作休息之后就要下山前往Oturere Hut入住</p>
+<p>下山的路满是松动的火山石，一定要登山杖往前伸，插在火山石中固定好了，再下脚，这个时候不要追求速度，保护膝盖是最重要的，最好有护膝<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611755/Aaron&#39;s%20Blog/Tongariro/WechatIMG809.jpg" alt=""></p>
+<p>到了坡底之后<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611885/Aaron&#39;s%20Blog/Tongariro/IMG_3579.jpg" alt=""></p>
+<p>其实还有一大段下坡。。<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517611904/Aaron&#39;s%20Blog/Tongariro/IMG_3582.jpg" alt=""><br>紧接着又是一段漫长的下山路，所谓路，其实也就是一片火山石，你自己找地方踩而已</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1517612012/Aaron&#39;s%20Blog/Tongariro/IMG_3586.jpg" alt=""><br>静静因为下山导致膝盖疼痛，我们一行三人放慢了速度前进，这时已经是傍晚7点了<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612030/Aaron&#39;s%20Blog/Tongariro/IMG_3590.jpg" alt=""><br>渐渐的太阳落山，亮光越来越少，我们开始在黑暗中行走<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612045/Aaron&#39;s%20Blog/Tongariro/IMG_3597.jpg" alt=""><br>到达Oturere Hut已经是夜里9点了，天完全黑，Hut里大部分的驴友已经钻进睡袋休息了，我们打着头灯，在厨房中烧水做晚饭，大家都尽量踮着脚走路，避免吵到其他人</p>
+<p>Hut的门上挂着个牌子，写着No Boot inside,所以大家都把沾满泥尘的登山靴脱下放在Hut门口，光脚或者穿拖鞋进。</p>
+<p>考虑到Hut的水没有经过treat，我们需要把水烧开，然后等它凉了之后再灌进水袋，这样第二天的路程才有足够的水资源，但是我随身带的铝锅容积只有1L不到，按照每个人3L水的需求，每锅水烧开需要10分钟来计算，我们烧开所有水并且放凉需要接近3个小时，这成为我们一个大麻烦。<br><img src="https://res.cloudinary.com/hr799/image/upload/a_0/v1517612245/Aaron&#39;s%20Blog/Tongariro/%E7%85%A7%E7%89%87_16-2-22_06_18_33.jpg" alt=""><br>好在Hut管理员，一个大概40岁左右的Kiwi过来询问我们情况，给我们安排好了床位，并且很热情得带我们绕到后面他的小房间里打水-可以直接饮用的水。他还告诉我们第二天的日出时间，并且说在日出的时候，Ngauruhoe火山会被照得亮红。</p>
+<p>解决了第二天喝水的难题，我们为了不发出更多的声音吵到其他驴友，三人没有刷牙，没有洗澡，没有洗脸就钻进了睡袋</p>
+<p>第二天一大早5:30，不少人就从睡袋里钻出来，开始生火做早饭了，Hut顿时热闹起来<br>Hut外搭帐篷过夜的<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517616146/Aaron&#39;s%20Blog/Tongariro/%E7%85%A7%E7%89%87_16-2-22_07_05_57.jpg" alt=""></p>
+<p>吃过早饭之后，太阳出来了，被照得通红的Ngauruhoe火山，这里也是电影魔戒里末日火山Mt. Doom的取景地</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517612344/Aaron&#39;s%20Blog/Tongariro/IMG_3598.jpg" alt=""></p>
+<p>Hut旁边的瀑布<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612352/Aaron&#39;s%20Blog/Tongariro/IMG_3608.jpg" alt=""><br>补几张Oturere Hut的照片<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612362/Aaron&#39;s%20Blog/Tongariro/IMG_3612.jpg" alt=""><br>一小哥在写日记<br><img src="https://res.cloudinary.com/hr799/image/upload/a_0/v1517612495/Aaron&#39;s%20Blog/Tongariro/%E7%85%A7%E7%89%87_16-2-22_07_37_47.jpg" alt=""></p>
+<p>预定的Hut其实就是一人一个床垫，Oturere一共有26个床位，分布在大厅和2个小房间里</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517612670/Aaron&#39;s%20Blog/Tongariro/IMG_6127.jpg" alt=""></p>
+<p>Hut外的储水罐<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612529/Aaron&#39;s%20Blog/Tongariro/%E7%85%A7%E7%89%87_16-2-22_06_35_09.jpg" alt=""><br>水龙头还是这种按压式的pump, 发现这里的水在大部分情况下是可以直接饮用，不需要treat<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612760/Aaron&#39;s%20Blog/Tongariro/IMG_6147.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612763/Aaron&#39;s%20Blog/Tongariro/IMG_6148.jpg" alt=""></p>
+<p>把昨晚的睡袋，装备等都重新打包整理过后，我们跟Hut管理员道谢，跟其他的Hut友们道别，重新踏上了步道</p>
+<p>今天的目标是途径Waihohonu Hut，再走到步道的终点Whakapapa。</p>
+<p>我们在途中的黑圈位置，要顺时针方向沿着蓝色箭头路线走回红圈点<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517605024/Aaron&#39;s%20Blog/Tongariro/%E8%B7%AF%E7%BA%BF%E5%9B%BE.png" alt=""><br>路标清楚得写着从Oturere Hut到Waihohonu Hut需要3个小时左右的时间<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612894/Aaron&#39;s%20Blog/Tongariro/IMG_3617.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612900/Aaron&#39;s%20Blog/Tongariro/IMG_3618.jpg" alt=""><br>每个人身上都挂着一袋垃圾,自己生产的垃圾自己带走<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613112/Aaron&#39;s%20Blog/Tongariro/IMG_3663.jpg" alt=""></p>
+<p>去往Waihohonu Hut的前半段路上捕捉到的一些趣味</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517612996/Aaron&#39;s%20Blog/Tongariro/IMG_3636.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517612998/Aaron&#39;s%20Blog/Tongariro/IMG_3668.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613208/Aaron&#39;s%20Blog/Tongariro/IMG_3671.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613252/Aaron&#39;s%20Blog/Tongariro/IMG_3665.jpg" alt=""><br>在无数个小山坡种走2个小时之后，我们进入了一片森林<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613325/Aaron&#39;s%20Blog/Tongariro/IMG_3677.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613333/Aaron&#39;s%20Blog/Tongariro/IMG_3689.jpg" alt=""><br>树林的穿越也是忽上忽下，大约在45分钟之后，我们终于爬到了一个视野广阔的山顶</p>
+<p>这时我们前方是Ruapehu<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613482/Aaron&#39;s%20Blog/Tongariro/IMG_3692.jpg" alt=""><br>Waihohonu Hut已经可以用肉眼看见了</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517613515/Aaron&#39;s%20Blog/Tongariro/WechatIMG810.jpg" alt=""></p>
+<p>不过这时同行的静静已经无法正常走路了，右脚膝盖疼痛导致走路一瘸一拐，加上长时间的负重行走，双脚已经疼到麻木了</p>
+<p>考虑到Waihohonu Hut距离终点还有6个小时左右的路程，我问静静：”要不你到Waihohonu Hut就别走了”</p>
+<p>静静思考了一会回答：“反正死不了，把全程走完吧”</p>
+<p>一路我们多次要求帮她分担一些背包的重量，都被婉拒</p>
+<p>只能说，我敬你是一条女汉子</p>
+<p>终于来到了Waihohonu Hut，这是一间仅5年多新的Hut，所以硬件设施比之前的2个Hut都来得好</p>
+<p>这个Hut里的水资源也是详细标出可以直接喝的，所以从Oturere Hut出发的时候，可以少背负些水，等到达这个Hut再补充<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613733/Aaron&#39;s%20Blog/Tongariro/IMG_3705.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517613748/Aaron&#39;s%20Blog/Tongariro/IMG_3720.jpg" alt=""><br>在这个Hut稍作休息，洗了把脸，我们又重新上路了</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1517613862/Aaron&#39;s%20Blog/Tongariro/IMG_3704.jpg" alt=""><br>拐去看了旧的Waihohonu Hut，部分在之前的火山喷发中被摧毁</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517613933/Aaron&#39;s%20Blog/Tongariro/IMG_3722.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/a_0/v1517613933/Aaron&#39;s%20Blog/Tongariro/IMG_3724.jpg" alt=""><br>距离终点只有6个小时的路程了，这最后的6个小时路况好了不少，但是经过长时间的的行走攀爬，对体力也有一定的要求<br><img src="https://res.cloudinary.com/hr799/image/upload/a_0/v1517615869/Aaron&#39;s%20Blog/Tongariro/%E7%85%A7%E7%89%87_16-2-22_11_54_22.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517614001/Aaron&#39;s%20Blog/Tongariro/IMG_3728.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517614005/Aaron&#39;s%20Blog/Tongariro/IMG_3730.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517614025/Aaron&#39;s%20Blog/Tongariro/IMG_3734.jpg" alt=""></p>
+<p>在接近终点的地方，有条小路可以拐去看Taranaki Falls，只需要五分钟，早知如此，我们第一天就不需要花一个多小时来回了<br><img src="https://res.cloudinary.com/hr799/image/upload/v1517614503/Aaron&#39;s%20Blog/Tongariro/IMG_3784.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1517614503/Aaron&#39;s%20Blog/Tongariro/IMG_3785.jpg" alt=""><br>终点终于出现在远方</p>
+<p><img src="https://res.cloudinary.com/hr799/image/upload/v1517614621/Aaron&#39;s%20Blog/Tongariro/WechatIMG811.jpg" alt=""><br>最后一鼓作气，走完剩下的路程，在2天时间内完成了Norther Circuit</p>
+<h1 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h1><ol>
+<li><p>所有产生的垃圾自行带走</p>
+</li>
+<li><p>住Hut难免会遇到打鼾的人，所以带副耳塞会给你减少不少痛苦</p>
+</li>
+<li><p>饮食遵循少吃多餐的原则，不要一口气吃太多</p>
+</li>
+<li><p>尽量不要携带罐头类食物，因为罐头本身重量大，吃过的空罐头还要再放包里，增加回程重量</p>
+</li>
+<li><p>夜里住Hut，登山靴要放在室外，因为露水大，所以建议用个塑料袋把鞋子包起来，这样鞋子和袜子在第二天穿的时候就不会湿漉漉的</p>
+</li>
+<li><p>下山时建议带上护膝</p>
+</li>
+<li><p>Gaiter可以防止鞋子进石头沙子，同时也可以保护腿不被火山石割伤，建议带上</p>
+</li>
+<li><p>如果不想太赶，建议花3-4天完成全程，可以多住一两个hut，喝喝下午茶，跟来自世界各地的驴友们扯扯蛋。当然了，如果想要挑战，也可以2天走完</p>
+</li>
+<li><p>新西兰的紫外线强度我们心照不宣，所以请做好防晒措施，UPF 50+的衣服帽子裤子防晒霜。</p>
+</li>
+<li><p>尽量利用山里可以利用的资源来减少自己的负担，比如带牛奶可以替换成带”奶粉“，直接在Hut里烧水泡，奶粉对比牛奶，质量就轻了不少</p>
+</li>
+<li><p>不愧是纽西兰九大Great Walks之一，如果有机会，值得一走</p>
+</li>
+</ol>
+]]></content>
+      
+        <categories>
+            
+            <category> Outdoor </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[2018 Web Dev Roadmap]]></title>
+      <url>/2018/01/09/2018-Web-Dev-Roadmap/</url>
+      <content type="html"><![CDATA[<p><img src="http://res.cloudinary.com/hr799/image/upload/v1515409596/Aaron&#39;s%20Blog/Tech/2018%20Tech%20Roadmap/1197770807-5a4f6f61762b1_articlex.png" alt=""></p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1515409596/Aaron&#39;s%20Blog/Tech/2018%20Tech%20Roadmap/680650591-5a4f6f612fff1_articlex.png" alt=""></p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1515409596/Aaron&#39;s%20Blog/Tech/2018%20Tech%20Roadmap/2212724493-5a4f6f61ed168_articlex.png" alt=""></p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1515409596/Aaron&#39;s%20Blog/Tech/2018%20Tech%20Roadmap/1857028210-5a4f6f6147a47_articlex.png" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Tech </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[何容推荐 - 浴室篇 - 提升生活品质的用品]]></title>
+      <url>/2018/01/01/%E4%BD%95%E5%AE%B9%E6%8E%A8%E8%8D%90-%E6%B5%B4%E5%AE%A4%E7%AF%87-%E6%8F%90%E5%8D%87%E7%94%9F%E6%B4%BB%E5%93%81%E8%B4%A8%E7%9A%84%E7%94%A8%E5%93%81/</url>
+      <content type="html"><![CDATA[<ul>
+<li>作者：何容</li>
+<li>居住地：奥克兰</li>
+</ul>
+<h1 id="第二部分：浴室"><a href="#第二部分：浴室" class="headerlink" title="第二部分：浴室"></a>第二部分：浴室</h1><h3 id="1-松下EW-DE55电动牙刷"><a href="#1-松下EW-DE55电动牙刷" class="headerlink" title="(1) 松下EW-DE55电动牙刷"></a>(1) 松下EW-DE55电动牙刷</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514784748/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E6%9D%BE%E4%B8%8BDE55.jpg" alt=""></p>
+<hr>
+<h3 id="2-Radius牙线"><a href="#2-Radius牙线" class="headerlink" title="(2) Radius牙线"></a>(2) Radius牙线</h3><hr>
+<h3 id="3-Aquis干发帽"><a href="#3-Aquis干发帽" class="headerlink" title="(3) Aquis干发帽"></a>(3) Aquis干发帽</h3><hr>
+<h3 id="4-松下EN-NA45铂金负离子电吹风"><a href="#4-松下EN-NA45铂金负离子电吹风" class="headerlink" title="(4) 松下EN-NA45铂金负离子电吹风"></a>(4) 松下EN-NA45铂金负离子电吹风</h3><hr>
+<h3 id="5-硅藻土浴室地垫"><a href="#5-硅藻土浴室地垫" class="headerlink" title="(5) 硅藻土浴室地垫"></a>(5) 硅藻土浴室地垫</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514786000/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E5%9C%B0%E5%9E%AB.jpg" alt=""></p>
+<p><em>*</em> （6）</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Life </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[何容推荐 - 厨房篇 - 提升生活品质的用品]]></title>
+      <url>/2017/12/30/%E6%8E%A8%E8%8D%90%E4%B8%80%E4%BA%9B%E8%83%BD%E6%8F%90%E5%8D%87%E7%94%9F%E6%B4%BB%E8%B4%A8%E9%87%8F%E5%92%8C%E5%B9%B8%E7%A6%8F%E6%84%9F%E7%9A%84%E5%AE%B6%E7%94%A8%E5%93%81/</url>
+      <content type="html"><![CDATA[<h4 id="写这篇文章目的，一是帮助长辈适当舍弃淘汰物品，二是当做自己的总结备份，三是避免重复回答朋友问题"><a href="#写这篇文章目的，一是帮助长辈适当舍弃淘汰物品，二是当做自己的总结备份，三是避免重复回答朋友问题" class="headerlink" title="写这篇文章目的，一是帮助长辈适当舍弃淘汰物品，二是当做自己的总结备份，三是避免重复回答朋友问题"></a>写这篇文章目的，一是帮助长辈适当舍弃淘汰物品，二是当做自己的总结备份，三是避免重复回答朋友问题</h4><ul>
+<li>作者：何容</li>
+<li>居住地：奥克兰</li>
+</ul>
+<p>文中所推荐的物品均为本人亲自使用后认为值得推荐的，希望能给大家一些帮助，同时抛砖引玉。</p>
+<h1 id="第一部分：厨房"><a href="#第一部分：厨房" class="headerlink" title="第一部分：厨房"></a>第一部分：厨房</h1><h3 id="1-松下SR-G50P1无轴原汁煲"><a href="#1-松下SR-G50P1无轴原汁煲" class="headerlink" title="(1) 松下SR-G50P1无轴原汁煲"></a>(1) 松下SR-G50P1无轴原汁煲</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514629157/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E6%9D%BE%E4%B8%8B%E5%8E%9F%E6%B1%81%E7%85%B2/f0b053acf10a4670b98cde2899a11237.jpg" alt=""></p>
+<p>这款松下原汁煲主打磁动力无轴搅拌技术, 利用食物本身水分/油分，做到少油、少盐、少水. 最大可达2.0个大气压(目前市面上高压锅里唯一能达到2.0大气压的)， 内置43种菜单，5L的容量，一家四口没难度。当然最重要的是它带16重安全装置，不用担心爆炸</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/a_0/v1514629089/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E6%9D%BE%E4%B8%8B%E5%8E%9F%E6%B1%81%E7%85%B2/IMG_6916.jpg" alt=""><br><img src="http://res.cloudinary.com/hr799/image/upload/a_0/v1514629093/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E6%9D%BE%E4%B8%8B%E5%8E%9F%E6%B1%81%E7%85%B2/IMG_6921.jpg" alt=""></p>
+<p>相较于普通电压力锅，它的奇妙之处在于加入了无轴体搅拌功能，上图是未放入搅拌轴的样子，下图为放入搅拌轴的图, 没有任何轴体链接，纯粹靠磁性固定，方便清洗</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/a_0/v1514629091/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E6%9D%BE%E4%B8%8B%E5%8E%9F%E6%B1%81%E7%85%B2/IMG_6922.jpg" alt=""></p>
+<p>之前做个猪蹄或者红烧鸡翅，步骤为</p>
+<blockquote>
+<p>出血—&gt;放入锅—&gt;大火烧开—&gt;小火炖煮—&gt;大火收汁</p>
+</blockquote>
+<p>自从有了这个锅之后，步骤精简成</p>
+<blockquote>
+<p>出血—&gt;放入锅</p>
+</blockquote>
+<p>而剩下的它统统都会为你做好，包括收汁，极大程度上提升了效率，并且得力于2.0大气压的帮助，猪蹄在15分钟内就可以相当酥软入味。传统电压力锅普遍存在一个问题就是炖肉不均匀，而这个松下原汁煲的内置轴体在工作过程中不断的搅拌食物，让味道均匀渗透进食材。<br><img src="http://res.cloudinary.com/hr799/image/upload/a_0/v1514631885/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/%E6%9D%BE%E4%B8%8B%E5%8E%9F%E6%B1%81%E7%85%B2/IMG_6936-1.jpg" alt=""></p>
+<hr>
+<h3 id="2-Tefal不粘锅Jamie-Oliver系列"><a href="#2-Tefal不粘锅Jamie-Oliver系列" class="headerlink" title="(2) Tefal不粘锅Jamie Oliver系列"></a>(2) Tefal不粘锅Jamie Oliver系列</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514633290/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/tefal%E4%B8%8D%E7%B2%98%E9%94%85/50041077_472263.jpg" alt=""></p>
+<p>来自法国Tefal的经典小红点锅，这款属于和英国名厨Jamie Oliver合作的名厨系列，直径25cm， 锅身采用5层结构钛铝夹层不沾设计，小红点可根据温度变化颜色，复合锅底适用于电磁炉，另外太阳花锅底纹路设计可以帮助加热。<br><img src="http://res.cloudinary.com/hr799/image/upload/v1514633969/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/tefal%E4%B8%8D%E7%B2%98%E9%94%85/WechatIMG718.jpg" alt=""><br> 用的是Tefal的Titanium不沾涂层，理论上支持进洗碗机。没有选择中华敞口炒锅是因为我没有爆炒的习惯。</p>
+<p>购于奥克兰本地Briscoe，打折的时候入性价比还是很不错的</p>
+<hr>
+<h3 id="3-WMF-Function-4系列汤锅"><a href="#3-WMF-Function-4系列汤锅" class="headerlink" title="(3) WMF Function 4系列汤锅"></a>(3) WMF Function 4系列汤锅</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514634621/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/WMF%E6%B1%A4%E9%94%85/07_6xxx_6380_10_4.jpg" alt=""></p>
+<p>汤锅，面锅属于使用率很高的东西，我的原则是一步到位直接买最好的，于是就有了这款WMF Function 4系列，购于德国，function 4属于WMF下的旗舰系列，获过Red Dot 红点及iF两项全球设计大奖，目前还是保持德国生产（其余系列已把生产线移到中国）. 锅身用的是18/10不锈钢，抗腐蚀、抗冲击、耐刮擦，不吸收异味，并且可用于烤箱，可洗碗机清洗，锅底是WMF的TransTherm通用锅底，由铬钢包裹铝制内芯制成，适用于所有类型的灶具。</p>
+<p>之所以叫做function 4，是因为它锅盖不同的放置方法还具有不同的烹调功能，它的4种不同倒出流量控制保证它可以安全的进行热汤倾倒，不会喷溅；大/小筛孔过滤；以及低水量焖煮，让水蒸气在锅内循环利用，节约用水用油。</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1514634637/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/WMF%E6%B1%A4%E9%94%85/wmffunction4miljo3-stor.jpg" alt=""></p>
+<p>近距离看一下做工，没有什么可以挑剔的, 用的18/10不锈钢，比起常见的304不锈钢，差别在于一个镍含量是10，一个镍含量是8，两者都抗腐蚀，不过，镍含量10的更稳定些，也被称为医用不锈钢。</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1514635650/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/WMF%E6%B1%A4%E9%94%85/WechatIMG720.jpg" alt=""><br><img src="https://res.cloudinary.com/hr799/image/upload/v1514635650/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/WMF%E6%B1%A4%E9%94%85/WechatIMG719.jpg" alt=""></p>
+<hr>
+<h3 id="4-Lodge铸铁牛排锅"><a href="#4-Lodge铸铁牛排锅" class="headerlink" title="(4) Lodge铸铁牛排锅"></a>(4) Lodge铸铁牛排锅</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514670693/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/IMG_5910.jpg" alt=""></p>
+<p>适合喜欢吃牛排羊排的家庭，全锅为一块纯铸铁打造，非常重，女生可能用起来比较吃力（重量在2.5KG左右，没有关系，让你男友煎好给你吃就行）。Lodge是美国的老牌子，走的价格亲民兼顾耐用路线，清一色的铸铁黑色，一看就是美式工业风格。 因为是纯铸铁，所以烹饪时候可以均匀受热，储热性能非常好，条纹是为了肉汁出来的时候不降低锅与肉之间的温度，厚底是为了关火之后能继续保持半小时的高温继续烹饪。</p>
+<p>这个锅需要耐心保养，每次使用后清洗干净 - 上火烤干 - 在锅表面均匀涂抹一层食用油，换句话说，只要保养得当，用一辈子问题不大。</p>
+<p>购于美国亚马逊，到新西兰运费跟锅差不多</p>
+<hr>
+<h3 id="5-藤次郎F-503三德刀"><a href="#5-藤次郎F-503三德刀" class="headerlink" title="(5) 藤次郎F-503三德刀"></a>(5) 藤次郎F-503三德刀</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514636227/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/WMF%E6%B1%A4%E9%94%85/tojiro-dp-santoku-knife-f-503-blade-170mm-6.7-handle-120mm-1977-p.jpg" alt=""></p>
+<p>看名字就知道这款刀来自日本，属于藤次郎下的入门三德刀，三德也是结合了亚洲厨房和西式厨房的一种刀形，比较轻巧，刀刃比较平直，适合切蔬菜水果包括肉类.</p>
+<p>选厨刀首要的是选钢材。普通的国产菜刀和主流德系厨刀，用的都是低碳钢。特点是钢质软，易加工（刀可以做得很漂亮），韧性好，不易锈（始终锃亮），持久性差，易钝，易卷刃</p>
+<p>日本的冶金技术和刀具制造水平非常高, 这款F-503日系的VG10(含碳量千分之十)，合金配比比较讲究，锋利度、持久性、硬度、韧性、防锈性都不错，各方面表现均衡，并且价格也不贵</p>
+<p>不过正再好的刀，也需要一个好的磨刀石，中国家庭传统的磨刀石，实际是非常伤刀的，建议配一块日本的砥石，价格上可能比刀本身还贵，但物有所值。很多人可能无法接受磨刀石的价格高过刀本身，实际上，一块好的磨刀石可以让刀保持持久锋利耐用，同理保养车比买车贵，墨水比打印机贵，养孩子比生孩子贵。所以，价值观正了，生活可以少很多纠结。</p>
+<p><img src="http://res.cloudinary.com/hr799/image/upload/v1514636227/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/WMF%E6%B1%A4%E9%94%85/tojiro-dp-santoku-knife-f-503-blade-170mm-6.7-handle-120mm-_3_-1977-p.jpg" alt=""></p>
+<hr>
+<h3 id="6-邓家刀"><a href="#6-邓家刀" class="headerlink" title="(6)邓家刀"></a>(6)邓家刀</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514671949/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/2d0a64d0-2f7d-11e5-9b0e-00163e002745.jpg" alt=""></p>
+<p>这刀看着一般，但用起来却非常顺手，另外它还非常便宜，国内京东89人民币，要啥自行车。<br>属于切片刀，千万别用来剁骨头。采用了夹层锻打工艺，外层是普通不锈钢，起到防锈、增加韧性的保护作用，同时还能降低成本。</p>
+<p>从刀身截面看，邓家刀的刀身的呈锥形的，刀身背厚镗空口薄，这样的刀身，把主要的重量集中在刀背处，从力学的原理来说更省力。另外有些人会说刀刃锋利很危险，但实际上，钝的刀其实更危险，因为刀刃钝，人不得不用蛮劲去切，剁，很容易在食材上打滑发生意外。</p>
+<p>目前我在家里就用日本三德刀搭配这把中国切片刀使用，基本可以覆盖所有的使用场景。</p>
+<hr>
+<h3 id="7-小熊蒸蛋锅"><a href="#7-小熊蒸蛋锅" class="headerlink" title="(7)小熊蒸蛋锅"></a>(7)小熊蒸蛋锅</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514673022/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/20150908104943060.jpg" alt=""></p>
+<p>又是一个国产早餐神器，便宜量大，双层蒸盘，现在我每天早上起床就蒸上2个鸡蛋，定时自动停火，下蒸盘蒸鸡蛋，上蒸盘可以放一些蔬菜包子之类的，非常方便，而且只有360W功率。</p>
+<p>小熊家电还有不少良心产品，比如中药炖锅，单人电锅之类的这里就不一一介绍了。</p>
+<hr>
+<h3 id="8-宜家食物保保鲜袋"><a href="#8-宜家食物保保鲜袋" class="headerlink" title="(8)宜家食物保保鲜袋"></a>(8)宜家食物保保鲜袋</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514673824/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/istad-shi-wu-dai-hu-shui-lu-se__0436938_PE590493_S4.jpg" alt=""></p>
+<p>用于食物存放，袋子表面还可以标注日期<br>一来可以让冰箱整洁，二来保持食物新鲜，三来防止食物串味。回想一下你家里的长辈们是不是都喜欢在冰箱里塞各种五颜六色的塑料袋，用了宜家食物袋之后，开冰箱取东西效率高了不少。</p>
+<hr>
+<h3 id="9-WMF刀叉套装"><a href="#9-WMF刀叉套装" class="headerlink" title="(9) WMF刀叉套装"></a>(9) WMF刀叉套装</h3><p><img src="http://res.cloudinary.com/hr799/image/upload/v1514674420/Aaron&#39;s%20Blog/%E5%AE%B6%E7%94%A8%E5%93%81/b27bd8f0-b41b-416c-81c5-fc0b1684b517.jpg" alt=""></p>
+<p>家里有个喜欢吃牛排的老婆，所以刀叉是必须要到位的.<br>这套WMF的刀叉当时购买与西班牙，做工用料都没话说，切牛排精准不拖沓。<br>同样采用18/10不锈钢，光泽度更好，硬度高。可以轻易将牛排分成小块。</p>
+<hr>
+<p>还有很多好用但还没来得及写上来的，会在后期慢慢更新</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Life </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Sublime Emmet Ctrl+E shortcut conflict]]></title>
+      <url>/2017/12/07/Aaron-s-first-blog/</url>
+      <content type="html"><![CDATA[<h1 id="Sublime中’Ctrl-e’快捷键跟Emmet插件冲突"><a href="#Sublime中’Ctrl-e’快捷键跟Emmet插件冲突" class="headerlink" title="Sublime中’Ctrl+e’快捷键跟Emmet插件冲突"></a>Sublime中’Ctrl+e’快捷键跟Emmet插件冲突</h1><p>习惯了在Mac下用Ctrl+e快捷键快速移动光标到行尾,但是当我在Sublime编辑中安装了Emmet插件之后(一个前端神器),却发现Ctrl+e冲突,解决方法如下:</p>
+<p><strong>sublime text -&gt; Perferences -&gt; Package Settings -&gt; Emmet -&gt; Key Bindings-User</strong></p>
+<p>并且插入以下代码,目的是覆盖Key bindings-default里的设置, 最后重启Sublime即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;keys&quot;: [</span><br><span class="line">            &quot;super+j&quot;</span><br><span class="line">        ], </span><br><span class="line">        &quot;args&quot;: &#123;</span><br><span class="line">            &quot;action&quot;: &quot;expand_abbreviation&quot;</span><br><span class="line">        &#125;, </span><br><span class="line">        &quot;command&quot;: &quot;run_emmet_action&quot;, </span><br><span class="line">        &quot;context&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;key&quot;: &quot;emmet_action_enabled.expand_abbreviation&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123; </span><br><span class="line">        &quot;keys&quot;: [</span><br><span class="line">            &quot;ctrl+e&quot;</span><br><span class="line">        ], </span><br><span class="line">        &quot;command&quot;: &quot;move_to&quot;, </span><br><span class="line">        &quot;args&quot;: &#123;&quot;to&quot;: &quot;eol&quot;, &quot;extend&quot;: false&#125; </span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p><img src="http://res.cloudinary.com/dcoyqnkd1/image/upload/v1512686117/111111_vlkosp.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Tech </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+  
+  
+</search>
