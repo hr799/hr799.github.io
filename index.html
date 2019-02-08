@@ -295,6 +295,141 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2019/02/08/转-JS代码风格习惯/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Aaron He">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aaron's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/08/转-JS代码风格习惯/" itemprop="url">[转]JS代码风格习惯</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-08T14:30:39+13:00">
+                2019-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          一、变量相关（1）变量数量的定义
+NO：滥用变量:
+123456789let kpi = 4;  // 定义好了之后再也没用过function example() &#123;	var a = 1;	var b = 2;	var c = a+b;	var d = c+1;	var e = d+a;	return e;&#125;
+YES: 数据只使用一次或不使用就无需装到变量中
+123456let kpi = 4;  // 没用的就删除掉，不然过三个月自己都不敢删，怕是不是那用到了function example() &#123;	var a = 1;	var b = 2;	return 2a+b+1;&#125;
+(2)变量的命名
+NO：自我感觉良好的缩写
+12let fName = &apos;jackie&apos;; // 看起来命名挺规范，缩写，驼峰法都用上，ESlint各种检测规范的工具都通过，But，fName是啥？这时候，你是不是想说What are you 弄啥呢？let lName = &apos;willen&apos;; // 这个问题和上面的一样
+YES：无需对每个变量都写注释，从名字上就看懂
+12let firstName = &apos;jackie&apos;; // 怎么样，是不是一目了然。少被喷了一次let lastName = &apos;wi
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/02/08/转-JS代码风格习惯/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2019/02/06/Ninja-400-Plastidip-Windscreen/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1613,165 +1748,6 @@ c
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2018/10/05/学习笔记-2018年10月第二周/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Aaron He">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/logo.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aaron's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/05/学习笔记-2018年10月第二周/" itemprop="url">学习笔记 - 2018年10月第二周 - MySQL优化 & 前端优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T14:38:12+13:00">
-                2018-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tech/" itemprop="url" rel="index">
-                    <span itemprop="name">Tech</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          MYSQL优化表结构
-字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。
-
-数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256
-
-
-SQL语句优化MySQL性能优化其中很重要的就是SQL语句的优化，比如使用index
-分表当数据库变得庞大的时候(比如超过200万条数据)，就可以考虑分表了
-数据库参数配置合理的配置数据库服务系统，可以有效提升数据库性能，比如最大连接数，数据库占用内存等配置。mysql的这些参数都有默认配置，但是默认配置不一定是最适合的，需要根据程序的特性和硬件状况对配置进行调整。
-主从复制，读写分离只有一台MySQL服务器无法支持大并发，所以遇到同时间访问暴增的情况，一台服务器处理不过来，所以增加MySQL服务器也是一种有效的增强性能方式。可以配置主从复制，CUD走Master服务器，R走Slaver服务器，这样就把压力分散开了。
-增加缓存用Redis， Memcache，elasticsearch等缓存层，可以减少数据库的连接。
-升级硬件土豪做法，当上面的几个方式都用过但是性能依旧有瓶颈的时候，就
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/05/学习笔记-2018年10月第二周/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1826,7 +1802,7 @@ SQL语句优化MySQL性能优化其中很重要的就是SQL语句的优化，比
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

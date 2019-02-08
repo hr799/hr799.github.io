@@ -295,6 +295,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2018/10/05/学习笔记-2018年10月第二周/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Aaron He">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aaron's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/05/学习笔记-2018年10月第二周/" itemprop="url">学习笔记 - 2018年10月第二周 - MySQL优化 & 前端优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T14:38:12+13:00">
+                2018-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tech/" itemprop="url" rel="index">
+                    <span itemprop="name">Tech</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          MYSQL优化表结构
+字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。
+
+数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256
+
+
+SQL语句优化MySQL性能优化其中很重要的就是SQL语句的优化，比如使用index
+分表当数据库变得庞大的时候(比如超过200万条数据)，就可以考虑分表了
+数据库参数配置合理的配置数据库服务系统，可以有效提升数据库性能，比如最大连接数，数据库占用内存等配置。mysql的这些参数都有默认配置，但是默认配置不一定是最适合的，需要根据程序的特性和硬件状况对配置进行调整。
+主从复制，读写分离只有一台MySQL服务器无法支持大并发，所以遇到同时间访问暴增的情况，一台服务器处理不过来，所以增加MySQL服务器也是一种有效的增强性能方式。可以配置主从复制，CUD走Master服务器，R走Slaver服务器，这样就把压力分散开了。
+增加缓存用Redis， Memcache，elasticsearch等缓存层，可以减少数据库的连接。
+升级硬件土豪做法，当上面的几个方式都用过但是性能依旧有瓶颈的时候，就
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/05/学习笔记-2018年10月第二周/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2018/10/01/学习笔记-2018年10月第一周/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1609,165 +1768,6 @@ npm run build背后发生了什么
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2018/07/02/How-to-clean-motorcycle-chain/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Aaron He">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/logo.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aaron's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/02/How-to-clean-motorcycle-chain/" itemprop="url">How to clean motorcycle chain</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-02T17:44:01+12:00">
-                2018-07-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Motorcycle/" itemprop="url" rel="index">
-                    <span itemprop="name">Motorcycle</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <ul>
-<li>Author：Aaron</li>
-<li>Location：Auckland, New Zealand</li>
-</ul>
-<p>Learning how to clean and lube a motorcycle chain is one of the essential step into motorcycle maintainance for new riders. It’s simple as and only takes 20 minutes. In this post, I will quickly show the easiest and cheapest way to clean and lube a motorcycle chain.</p>
-<h3 id="Tools-you-need"><a href="#Tools-you-need" class="headerlink" title="Tools you need"></a>Tools you need</h3><ol>
-<li>Chain clean($22.5 from Motomail)</li>
-<li>Chain lube($22.5 from Motomail)</li>
-<li>Chain brush($27.5 from Motomail, you can also buy from trademe for $9)</li>
-<li>wrench</li>
-<li>Water spray</li>
-<li>Wood block(cut into size)</li>
-</ol>
-<p><img src="http://ww1.sinaimg.cn/large/929aa310gy1fsvhndfmiyj21400u078g.jpg" alt=""><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/02/How-to-clean-motorcycle-chain/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1822,7 +1822,7 @@ npm run build背后发生了什么
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
