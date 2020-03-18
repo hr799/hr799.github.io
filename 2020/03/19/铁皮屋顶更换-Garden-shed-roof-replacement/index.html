@@ -79,20 +79,29 @@
 
 
 
-<meta name="description" content="MYSQL优化表结构 字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。  数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256">
+<meta name="description" content="前言家里侧院的铁皮房荒废已久, 里面零零散散堆了一些没用的木头以及杂物, 因为它的屋顶之前被掉落的树枝砸凹陷, 导致下雨漏水, 木地板因为长期遇水, 已经腐蚀烂了. 那就动手开始干吧. 方案 更换坏的屋顶瓦片 铁皮屋增加内部木框架 更换木地板 增加地板防潮垫 修理门锁  材料 木头6根(6米/根) 木板2片, 需要是treated木板, 防潮(Bunnings一片$74刀左右, 1.2米*2.4米">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习笔记 - 2018年10月第二周 - MySQL优化 &amp; 前端优化">
-<meta property="og:url" content="https://hr799.github.io/2018/10/05/学习笔记-2018年10月第二周/index.html">
+<meta property="og:title" content="铁皮屋顶更换 - Garden shed roof replacement">
+<meta property="og:url" content="https://hr799.github.io/2020/03/19/铁皮屋顶更换-Garden-shed-roof-replacement/index.html">
 <meta property="og:site_name" content="Aaron&#39;s Blog">
-<meta property="og:description" content="MYSQL优化表结构 字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。  数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256">
+<meta property="og:description" content="前言家里侧院的铁皮房荒废已久, 里面零零散散堆了一些没用的木头以及杂物, 因为它的屋顶之前被掉落的树枝砸凹陷, 导致下雨漏水, 木地板因为长期遇水, 已经腐蚀烂了. 那就动手开始干吧. 方案 更换坏的屋顶瓦片 铁皮屋增加内部木框架 更换木地板 增加地板防潮垫 修理门锁  材料 木头6根(6米/根) 木板2片, 需要是treated木板, 防潮(Bunnings一片$74刀左右, 1.2米*2.4米">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/929aa310ly1fw42qumxsoj21260putfg.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/929aa310ly1fw42quky8hj20ww0pygqp.jpg">
-<meta property="og:updated_time" content="2018-10-11T11:19:35.846Z">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/HGP582EDBwK6lAt.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/v7eAuo63dcGplXa.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/ks1pLlzBDTCU3y8.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/cZmUws9dRbq72gk.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/Ffd8mJ1kBIorSOe.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/Tl5IsJ3x7utvhCL.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/b6RwIA5HMDrh2Nl.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/TQwiNDm9BGI2KpP.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/4VrHcnKmF8OhMdb.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/RFI5PZnyJVbOQlg.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/03/18/4DazUAFPlrcvjVn.jpg">
+<meta property="og:updated_time" content="2020-03-18T11:53:42.724Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="学习笔记 - 2018年10月第二周 - MySQL优化 &amp; 前端优化">
-<meta name="twitter:description" content="MYSQL优化表结构 字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。  数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/929aa310ly1fw42qumxsoj21260putfg.jpg">
+<meta name="twitter:title" content="铁皮屋顶更换 - Garden shed roof replacement">
+<meta name="twitter:description" content="前言家里侧院的铁皮房荒废已久, 里面零零散散堆了一些没用的木头以及杂物, 因为它的屋顶之前被掉落的树枝砸凹陷, 导致下雨漏水, 木地板因为长期遇水, 已经腐蚀烂了. 那就动手开始干吧. 方案 更换坏的屋顶瓦片 铁皮屋增加内部木框架 更换木地板 增加地板防潮垫 修理门锁  材料 木头6根(6米/根) 木板2片, 需要是treated木板, 防潮(Bunnings一片$74刀左右, 1.2米*2.4米">
+<meta name="twitter:image" content="https://i.loli.net/2020/03/18/HGP582EDBwK6lAt.jpg">
 
 
 
@@ -122,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="https://hr799.github.io/2018/10/05/学习笔记-2018年10月第二周/"/>
+  <link rel="canonical" href="https://hr799.github.io/2020/03/19/铁皮屋顶更换-Garden-shed-roof-replacement/"/>
 
 
 
 
 
-  <title>学习笔记 - 2018年10月第二周 - MySQL优化 & 前端优化 | Aaron's Blog</title>
+  <title>铁皮屋顶更换 - Garden shed roof replacement | Aaron's Blog</title>
   
 
 
@@ -298,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2018/10/05/学习笔记-2018年10月第二周/">
+    <link itemprop="mainEntityOfPage" href="https://hr799.github.io/2020/03/19/铁皮屋顶更换-Garden-shed-roof-replacement/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Aaron He">
@@ -315,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">学习笔记 - 2018年10月第二周 - MySQL优化 & 前端优化</h1>
+          <h1 class="post-title" itemprop="name headline">铁皮屋顶更换 - Garden shed roof replacement</h1>
         
 
         <div class="post-meta">
@@ -327,8 +336,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-05T14:38:12+13:00">
-                2018-10-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-19T00:27:21+13:00">
+                2020-03-19
               </time>
             
 
@@ -350,8 +359,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tech/" itemprop="url" rel="index">
-                    <span itemprop="name">Tech</span>
+                  <a href="/categories/DIY/" itemprop="url" rel="index">
+                    <span itemprop="name">DIY</span>
                   </a>
                 </span>
 
@@ -387,135 +396,28 @@
       
 
       
-        <h2 id="MYSQL优化"><a href="#MYSQL优化" class="headerlink" title="MYSQL优化"></a>MYSQL优化</h2><h3 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h3><ol>
-<li><p>字段的数据类型:不同数据类型的储存和检索方式不同，所以选择合理的数据类型，比如人类的年龄，用tinyint比用integer来得节省资源。</p>
-</li>
-<li><p>数据类型的长度:数据库最后总是要放到储存盘上，不管是磁盘还是固态硬盘，所以字段的长度也影响硬盘的I/O操作，字段长，对应的I/O时间也长，所以要选择合理的数据类型长度，比如手机号0211234567选择12位长度就够了，没必要选256</p>
-</li>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>家里侧院的铁皮房荒废已久, 里面零零散散堆了一些没用的木头以及杂物, 因为它的屋顶之前被掉落的树枝砸凹陷, 导致下雨漏水, 木地板因为长期遇水, 已经腐蚀烂了. 那就动手开始干吧.<br><img src="https://i.loli.net/2020/03/18/HGP582EDBwK6lAt.jpg" alt="1581584530667_.pic.jpg"></p>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><ol>
+<li>更换坏的屋顶瓦片</li>
+<li>铁皮屋增加内部木框架</li>
+<li>更换木地板</li>
+<li>增加地板防潮垫</li>
+<li>修理门锁</li>
 </ol>
-<h3 id="SQL语句优化"><a href="#SQL语句优化" class="headerlink" title="SQL语句优化"></a>SQL语句优化</h3><p>MySQL性能优化其中很重要的就是SQL语句的优化，比如使用index</p>
-<h3 id="分表"><a href="#分表" class="headerlink" title="分表"></a>分表</h3><p>当数据库变得庞大的时候(比如超过200万条数据)，就可以考虑分表了</p>
-<h3 id="数据库参数配置"><a href="#数据库参数配置" class="headerlink" title="数据库参数配置"></a>数据库参数配置</h3><p>合理的配置数据库服务系统，可以有效提升数据库性能，比如最大连接数，数据库占用内存等配置。mysql的这些参数都有默认配置，但是默认配置不一定是最适合的，需要根据程序的特性和硬件状况对配置进行调整。</p>
-<h3 id="主从复制，读写分离"><a href="#主从复制，读写分离" class="headerlink" title="主从复制，读写分离"></a>主从复制，读写分离</h3><p>只有一台MySQL服务器无法支持大并发，所以遇到同时间访问暴增的情况，一台服务器处理不过来，所以增加MySQL服务器也是一种有效的增强性能方式。<br>可以配置主从复制，CUD走Master服务器，R走Slaver服务器，这样就把压力分散开了。</p>
-<h3 id="增加缓存"><a href="#增加缓存" class="headerlink" title="增加缓存"></a>增加缓存</h3><p>用Redis， Memcache，elasticsearch等缓存层，可以减少数据库的连接。</p>
-<h3 id="升级硬件"><a href="#升级硬件" class="headerlink" title="升级硬件"></a>升级硬件</h3><p>土豪做法，当上面的几个方式都用过但是性能依旧有瓶颈的时候，就花钱升级硬件吧。更牛逼的CPU，更大的内存，更大的网络带宽。</p>
-<hr>
-<h3 id="MySQL军规"><a href="#MySQL军规" class="headerlink" title="MySQL军规"></a>MySQL军规</h3><h4 id="核心军规"><a href="#核心军规" class="headerlink" title="核心军规"></a>核心军规</h4><ol>
-<li>尽量不在数据库做运算</li>
-<li>控制表单数据量，纯INT不超过10M条，含Char不超过5M条</li>
-<li>保持数据表slim</li>
-<li>平衡范式和冗余</li>
-<li>拒绝大SQL， 复杂事物，大批量任务</li>
+<h2 id="材料"><a href="#材料" class="headerlink" title="材料"></a>材料</h2><ol>
+<li>木头6根(6米/根)</li>
+<li>木板2片, 需要是treated木板, 防潮(Bunnings一片$74刀左右, 1.2米*2.4米)</li>
+<li>的铁皮屋顶2片(3米 * 0.86米)</li>
+<li>防潮垫(2米*10米)</li>
 </ol>
-<h4 id="字段类军规"><a href="#字段类军规" class="headerlink" title="字段类军规"></a>字段类军规</h4><ol>
-<li>用好数值字段，尽量简化字段位数</li>
-<li>把字符转化为数字</li>
-<li>优先使用Enum或者set</li>
-<li>避免使用null字段</li>
-<li>少用并拆分Text/blog</li>
-<li>不在数据库中存图片</li>
-</ol>
-<h4 id="索引类军规"><a href="#索引类军规" class="headerlink" title="索引类军规"></a>索引类军规</h4><ol>
-<li>谨慎合理添加索引</li>
-<li>字符字段必须建立前缀索引</li>
-<li>不在索引列做运算</li>
-<li>自增列或者全局ID做InnoDB主键</li>
-<li>尽量不用外键</li>
-</ol>
-<p>SQL类军规</p>
-<ol>
-<li>SQL尽可能简单</li>
-<li>保持事物连接短小</li>
-<li>尽可能避免使用SP/Trigger/Function</li>
-<li>尽可能不要用Select *</li>
-<li>改写Or为IN()</li>
-<li>改写Or为Union</li>
-<li>避免负向查询和%前缀模糊查询</li>
-<li>Count不要使用在可null的字段上</li>
-<li>减少count(*)</li>
-<li>Limit高效分页</li>
-<li>用Union ALL替代Union</li>
-<li>分解链接，保证高并发</li>
-<li>Group by去除排序</li>
-<li>同数据类型的列值比较</li>
-<li>load Data导入数据，比Insert快20倍</li>
-<li>打散大批量更新，尽量凌晨操作</li>
-</ol>
-<h4 id="约定类军规"><a href="#约定类军规" class="headerlink" title="约定类军规"></a>约定类军规</h4><ol>
-<li>隔离线上线下</li>
-<li>禁止未经DBA认证的子查询</li>
-<li>永远不在程序段显式加锁</li>
-<li>同意字符集为UTF-8，统一命名规范</li>
-</ol>
-<hr>
-<h2 id="前端优化"><a href="#前端优化" class="headerlink" title="前端优化"></a>前端优化</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><blockquote>
-<p>最近IEMALL项目稳步向前推进，主体功能不断迭代优化，进而开始把注意力转移一部分到前端的优化 - 如何能在不影响功能的基础上，最大程度提升用户体验。</p>
-</blockquote>
-<h3 id="首屏优化"><a href="#首屏优化" class="headerlink" title="首屏优化"></a>首屏优化</h3><p>作为用户的第一印象，首页的载入速度至关重要, 特别是可视区域，尽可能的缩短这个步骤的耗时。能让用户满意度大幅提升，下面我粗糙对比了一下我们当前项目和某相似竞争产品之间的首页载入时间。</p>
-<p>竞争对手的首页载入速度</p>
-<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw42qumxsoj21260putfg.jpg" alt=""></p>
-<p>我们的首页载入速度</p>
-<p><img src="http://ww1.sinaimg.cn/large/929aa310ly1fw42quky8hj20ww0pygqp.jpg" alt=""></p>
-<p>列个表来对比一下具体区别（A = 竞品; B = 我们）</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th style="text-align:center">A</th>
-<th style="text-align:center">B</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>服务器位置</td>
-<td style="text-align:center">澳大利亚</td>
-<td style="text-align:center">香港</td>
-</tr>
-<tr>
-<td>首页载入时间</td>
-<td style="text-align:center">54.6s</td>
-<td style="text-align:center">19.17s</td>
-</tr>
-<tr>
-<td>DOM载入时间</td>
-<td style="text-align:center">2.21s</td>
-<td style="text-align:center">2.17s</td>
-</tr>
-<tr>
-<td>接口数</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">11</td>
-</tr>
-<tr>
-<td>图片数</td>
-<td style="text-align:center">55</td>
-<td style="text-align:center">36</td>
-</tr>
-<tr>
-<td>js数</td>
-<td style="text-align:center">8</td>
-<td style="text-align:center">5</td>
-</tr>
-<tr>
-<td>css数</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">2</td>
-</tr>
-<tr>
-<td>总大小</td>
-<td style="text-align:center">20.7M</td>
-<td style="text-align:center">1.1MB</td>
-</tr>
-</tbody>
-</table>
-<p>可以直观看出，我们的首页还是有优势的。其中首屏60%以上的大小都是由图片构成的，所以图片加载至关重要，A在首页直接载入了所有图片，包括那些需要翻页五六次的产品图，而我们采取了懒加载 - 仅仅当用户下拉至预设位置才开始载入新图片。<br>再来看每张图片的大小， 同样是用来显示商品的thumbnail图，A的平均图片大小是381km, B的平均图片大小是48.5kb.</p>
-<h3 id="第三方按需加载"><a href="#第三方按需加载" class="headerlink" title="第三方按需加载"></a>第三方按需加载</h3><p>在这个项目中，我们用的是vant-ui框架，根据按需加载的原则，我们避免使用下方的方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import vant from &apos;vant-ui&apos;</span><br></pre></td></tr></table></figure></p>
-<p>这种全部引入的方式会导致js文件过大，取而代之的，可以只在每个组件里引入它对应需要用的ui控件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;swipe, Sku, ImagePreview, Tag, Toast&#125; from &apos;vant&apos;</span><br></pre></td></tr></table></figure></p>
-<h3 id="路由懒加载"><a href="#路由懒加载" class="headerlink" title="路由懒加载"></a>路由懒加载</h3><p>路由懒加载也叫做延迟加载，随用随载，vue这类的SPA程序，如果没用路由懒加载，会导致webpack打包出来的体积略大，这样用户在首次加载网页的时候，需要下载的东西过大，导致屏幕留白时间过长，影响用户体验，进而导致客源流失。</p>
-<p>vue官方也推荐使用路由懒加载的方式优化项目</p>
-<blockquote>
-<p><a href="https://router.vuejs.org/guide/advanced/lazy-loading.html#grouping-components-in-the-same-chunk" target="_blank" rel="noopener">https://router.vuejs.org/guide/advanced/lazy-loading.html#grouping-components-in-the-same-chunk</a></p>
-</blockquote>
+<p><img src="https://i.loli.net/2020/03/18/v7eAuo63dcGplXa.jpg" alt="1551584530663_.pic.jpg"><br><img src="https://i.loli.net/2020/03/18/ks1pLlzBDTCU3y8.jpg" alt="1691584532134_.pic.jpg"><br><img src="https://i.loli.net/2020/03/18/cZmUws9dRbq72gk.jpg" alt="1621584530673_.pic.jpg"></p>
+<h2 id="施工"><a href="#施工" class="headerlink" title="施工"></a>施工</h2><p>首先测量内部长宽高, 然后锯相对应的木条, 搭建内部框架, 这一步是为了增加铁皮房的坚固程度.</p>
+<p><img src="https://i.loli.net/2020/03/18/Ffd8mJ1kBIorSOe.jpg" alt="1591584530669_.pic.jpg"><br><img src="https://i.loli.net/2020/03/18/Tl5IsJ3x7utvhCL.jpg" alt="1611584530672_.pic.jpg"><br>首先将破损的屋顶贴片拆除, 使用钻头, 把所有铆钉钻穿就好了, 铁皮顶就可以轻易的卸下来<br><img src="https://i.loli.net/2020/03/18/b6RwIA5HMDrh2Nl.jpg" alt="1631584530758_.pic.jpg"></p>
+<p>然后在新的铁皮顶上, 用切割机切出相等长宽的片, 使用roof screw锁到内部的木条上<br><img src="https://i.loli.net/2020/03/18/TQwiNDm9BGI2KpP.jpg" alt="1641584530759_.pic.jpg"></p>
+<p>在2片铁皮交接的最高点, 用横条覆盖, 然后在缝隙的地方打膨胀泡沫(Bunnings有卖, expanding foam). 彻底杜绝雨水进入铁皮屋内部<br><img src="https://i.loli.net/2020/03/18/4VrHcnKmF8OhMdb.jpg" alt="1651584530760_.pic.jpg"></p>
+<p>屋顶搞定后, 来弄室内, 清扫干净地面, 然后测量裁剪出相同大小的防潮垫, 平铺, 使用订书机固定在地面使其不会移动. 这一步彻底杜绝了从地面上来的潮气<br><img src="https://i.loli.net/2020/03/18/RFI5PZnyJVbOQlg.jpg" alt="1671584530779_.pic.jpg"></p>
+<p>切木板, 平铺, 锁螺丝固定到底下的横梁上<br><img src="https://i.loli.net/2020/03/18/4DazUAFPlrcvjVn.jpg" alt="1681584530780_.pic.jpg"><br>到这, 铁皮房就已修复完毕, 6平方的空间, 可以放不少杂物</p>
+<p>剩下修理铁皮屋门锁就不放图了</p>
 
       
     </div>
@@ -540,8 +442,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/01/学习笔记-2018年10月第一周/" rel="next" title="学习笔记 - 2018年10月第一周 - 包管理工具">
-                <i class="fa fa-chevron-left"></i> 学习笔记 - 2018年10月第一周 - 包管理工具
+              <a href="/2020/02/06/家庭雨水收集灌溉系统-Rain-Harvesting-System/" rel="next" title="家庭雨水收集灌溉系统 - Rain Harvesting System ">
+                <i class="fa fa-chevron-left"></i> 家庭雨水收集灌溉系统 - Rain Harvesting System 
               </a>
             
           </div>
@@ -549,10 +451,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/06/洗碗机购买记录-解放劳动力/" rel="prev" title="洗碗机购买记录 - 解放劳动力">
-                洗碗机购买记录 - 解放劳动力 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -707,7 +605,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MYSQL优化"><span class="nav-number">1.</span> <span class="nav-text"><a href="#MYSQL&#x4F18;&#x5316;" class="headerlink" title="MYSQL&#x4F18;&#x5316;"></a>MYSQL&#x4F18;&#x5316;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表结构"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x8868;&#x7ED3;&#x6784;" class="headerlink" title="&#x8868;&#x7ED3;&#x6784;"></a>&#x8868;&#x7ED3;&#x6784;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语句优化"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#SQL&#x8BED;&#x53E5;&#x4F18;&#x5316;" class="headerlink" title="SQL&#x8BED;&#x53E5;&#x4F18;&#x5316;"></a>SQL&#x8BED;&#x53E5;&#x4F18;&#x5316;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分表"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#&#x5206;&#x8868;" class="headerlink" title="&#x5206;&#x8868;"></a>&#x5206;&#x8868;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库参数配置"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#&#x6570;&#x636E;&#x5E93;&#x53C2;&#x6570;&#x914D;&#x7F6E;" class="headerlink" title="&#x6570;&#x636E;&#x5E93;&#x53C2;&#x6570;&#x914D;&#x7F6E;"></a>&#x6570;&#x636E;&#x5E93;&#x53C2;&#x6570;&#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从复制，读写分离"><span class="nav-number">1.5.</span> <span class="nav-text"><a href="#&#x4E3B;&#x4ECE;&#x590D;&#x5236;&#xFF0C;&#x8BFB;&#x5199;&#x5206;&#x79BB;" class="headerlink" title="&#x4E3B;&#x4ECE;&#x590D;&#x5236;&#xFF0C;&#x8BFB;&#x5199;&#x5206;&#x79BB;"></a>&#x4E3B;&#x4ECE;&#x590D;&#x5236;&#xFF0C;&#x8BFB;&#x5199;&#x5206;&#x79BB;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增加缓存"><span class="nav-number">1.6.</span> <span class="nav-text"><a href="#&#x589E;&#x52A0;&#x7F13;&#x5B58;" class="headerlink" title="&#x589E;&#x52A0;&#x7F13;&#x5B58;"></a>&#x589E;&#x52A0;&#x7F13;&#x5B58;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#升级硬件"><span class="nav-number">1.7.</span> <span class="nav-text"><a href="#&#x5347;&#x7EA7;&#x786C;&#x4EF6;" class="headerlink" title="&#x5347;&#x7EA7;&#x786C;&#x4EF6;"></a>&#x5347;&#x7EA7;&#x786C;&#x4EF6;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL军规"><span class="nav-number">1.8.</span> <span class="nav-text"><a href="#MySQL&#x519B;&#x89C4;" class="headerlink" title="MySQL&#x519B;&#x89C4;"></a>MySQL&#x519B;&#x89C4;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#核心军规"><span class="nav-number">1.8.1.</span> <span class="nav-text"><a href="#&#x6838;&#x5FC3;&#x519B;&#x89C4;" class="headerlink" title="&#x6838;&#x5FC3;&#x519B;&#x89C4;"></a>&#x6838;&#x5FC3;&#x519B;&#x89C4;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字段类军规"><span class="nav-number">1.8.2.</span> <span class="nav-text"><a href="#&#x5B57;&#x6BB5;&#x7C7B;&#x519B;&#x89C4;" class="headerlink" title="&#x5B57;&#x6BB5;&#x7C7B;&#x519B;&#x89C4;"></a>&#x5B57;&#x6BB5;&#x7C7B;&#x519B;&#x89C4;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引类军规"><span class="nav-number">1.8.3.</span> <span class="nav-text"><a href="#&#x7D22;&#x5F15;&#x7C7B;&#x519B;&#x89C4;" class="headerlink" title="&#x7D22;&#x5F15;&#x7C7B;&#x519B;&#x89C4;"></a>&#x7D22;&#x5F15;&#x7C7B;&#x519B;&#x89C4;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#约定类军规"><span class="nav-number">1.8.4.</span> <span class="nav-text"><a href="#&#x7EA6;&#x5B9A;&#x7C7B;&#x519B;&#x89C4;" class="headerlink" title="&#x7EA6;&#x5B9A;&#x7C7B;&#x519B;&#x89C4;"></a>&#x7EA6;&#x5B9A;&#x7C7B;&#x519B;&#x89C4;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端优化"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x524D;&#x7AEF;&#x4F18;&#x5316;" class="headerlink" title="&#x524D;&#x7AEF;&#x4F18;&#x5316;"></a>&#x524D;&#x7AEF;&#x4F18;&#x5316;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x80CC;&#x666F;" class="headerlink" title="&#x80CC;&#x666F;"></a>&#x80CC;&#x666F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#首屏优化"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x9996;&#x5C4F;&#x4F18;&#x5316;" class="headerlink" title="&#x9996;&#x5C4F;&#x4F18;&#x5316;"></a>&#x9996;&#x5C4F;&#x4F18;&#x5316;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三方按需加载"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E09;&#x65B9;&#x6309;&#x9700;&#x52A0;&#x8F7D;" class="headerlink" title="&#x7B2C;&#x4E09;&#x65B9;&#x6309;&#x9700;&#x52A0;&#x8F7D;"></a>&#x7B2C;&#x4E09;&#x65B9;&#x6309;&#x9700;&#x52A0;&#x8F7D;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由懒加载"><span class="nav-number">2.4.</span> <span class="nav-text"><a href="#&#x8DEF;&#x7531;&#x61D2;&#x52A0;&#x8F7D;" class="headerlink" title="&#x8DEF;&#x7531;&#x61D2;&#x52A0;&#x8F7D;"></a>&#x8DEF;&#x7531;&#x61D2;&#x52A0;&#x8F7D;</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x65B9;&#x6848;" class="headerlink" title="&#x65B9;&#x6848;"></a>&#x65B9;&#x6848;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#材料"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x6750;&#x6599;" class="headerlink" title="&#x6750;&#x6599;"></a>&#x6750;&#x6599;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#施工"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x65BD;&#x5DE5;" class="headerlink" title="&#x65BD;&#x5DE5;"></a>&#x65BD;&#x5DE5;</span></a></li></ol></div>
             
 
           </div>
